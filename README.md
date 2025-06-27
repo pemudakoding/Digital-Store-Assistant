@@ -13,7 +13,7 @@ Jalankan KoalaStore Bot hanya dalam 5 menit:
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/yourusername/KoalaStore.git
+git clone https://github.com/pemudakoding/Digital-Store-Assistant.git
 cd KoalaStore
 
 # 2. Install dependencies
@@ -145,7 +145,7 @@ Kami welcome kontribusi! Bacalah panduan berikut:
 ### Development Setup
 ```bash
 # Fork dan clone repository
-git clone https://github.com/yourusername/KoalaStore.git
+git clone https://github.com/pemudakoding/Digital-Store-Assistant.git
 
 # Install dependencies
 npm install
@@ -171,14 +171,9 @@ npm test
 
 ### Getting Help
 - **📖 [Documentation](.docs/README.md)** - Comprehensive guides
-- **🐛 [Issues](https://github.com/yourusername/KoalaStore/issues)** - Bug reports
-- **💬 [Discussions](https://github.com/yourusername/KoalaStore/discussions)** - Community Q&A
-- **📧 Email**: support@koalastore.com
-
-### Community
-- **💬 WhatsApp**: [Developer Group](https://chat.whatsapp.com/invite)
-- **🎮 Discord**: [KoalaStore Community](https://discord.gg/koalastore)
-- **📱 Telegram**: [@KoalaStoreDev](https://t.me/KoalaStoreDev)
+- **🐛 [Issues](https://github.com/pemudakoding/Digital-Store-Assistant/issues)** - Bug reports
+- **💬 [Discussions](https://github.com/pemudakoding/Digital-Store-Assistant/discussions)** - Community Q&A
+- **📧 Email**: pemudakoding@gmail.com
 
 ## 📄 License
 
@@ -188,11 +183,11 @@ Released under the [MIT License](LICENSE).
 
 <div align="center">
 
-**🐨 KoalaStore Bot v2.0.0**  
+**🐨 Koalastore.digi Bot v2.0.0**  
 *Modern WhatsApp Bot • Production Ready • Open Source*
 
 [📖 Documentation](.docs/README.md) • [🚀 Quick Start](.docs/01-quick-start.md) • [🤝 Contributing](.docs/12-contributing.md) • [🆘 Support](#-support)
 
-**Made with ❤️ by the KoalaStore Team**
+**Made with ❤️ by the KoalaStore.digi Team**
 
 </div> 

@@ -55,7 +55,7 @@ npm --version
 
 ```bash
 # Clone project
-git clone https://github.com/yourusername/KoalaStore.git
+git clone https://github.com/pemudakoding/Digital-Store-Assistant.git
 cd KoalaStore
 
 # Atau fork dulu jika ingin contribute
@@ -418,7 +418,7 @@ nvm use 20
 
 Jika mengalami issues:
 1. Check [Troubleshooting Guide](./14-troubleshooting.md)
-2. Search di [GitHub Issues](https://github.com/yourusername/KoalaStore/issues)
+2. Search di [GitHub Issues](https://github.com/pemudakoding/Digital-Store-Assistant/issues)
 3. Buat issue baru dengan detail lengkap
 4. Join grup developer untuk bantuan real-time
 

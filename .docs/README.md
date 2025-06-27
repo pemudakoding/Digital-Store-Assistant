@@ -190,15 +190,9 @@ Jika Anda ingin menggunakan bot untuk toko digital:
 
 ### Getting Help
 - **📖 [Documentation](./)** - Comprehensive guides dan tutorials
-- **🐛 [GitHub Issues](https://github.com/yourusername/KoalaStore/issues)** - Bug reports dan feature requests
-- **💬 [Discussions](https://github.com/yourusername/KoalaStore/discussions)** - Community Q&A dan ideas
-- **📧 Email**: support@koalastore.com - Direct contact untuk urgent issues
-
-### Community Channels
-- **💬 WhatsApp Group**: [Join Developer Community](https://chat.whatsapp.com/invite)
-- **🎮 Discord Server**: [KoalaStore Community](https://discord.gg/koalastore)
-- **📱 Telegram**: [@KoalaStoreDev](https://t.me/KoalaStoreDev)
-- **🐦 Twitter**: [@KoalaStoreBot](https://twitter.com/KoalaStoreBot)
+- **🐛 [GitHub Issues](https://github.com/pemudakoding/Digital-Store-Assistant/issues)** - Bug reports dan feature requests
+- **💬 [Discussions](https://github.com/pemudakoding/Digital-Store-Assistant/discussions)** - Community Q&A dan ideas
+- **📧 Email**: pemudakoding@gmail.com - Direct contact untuk urgent issues
 
 ---
 
@@ -210,6 +204,6 @@ Jika Anda ingin menggunakan bot untuk toko digital:
 **Terakhir diperbarui**: Desember 2024  
 **Versi dokumentasi**: 2.0.0
 
-[⭐ Star Project](https://github.com/yourusername/KoalaStore) | [🐛 Report Issue](https://github.com/yourusername/KoalaStore/issues) | [💡 Request Feature](https://github.com/yourusername/KoalaStore/discussions) | [🤝 Contribute](./12-contributing.md)
+[⭐ Star Project](https://github.com/pemudakoding/Digital-Store-Assistant) | [🐛 Report Issue](https://github.com/pemudakoding/Digital-Store-Assistant/issues) | [💡 Request Feature](https://github.com/pemudakoding/Digital-Store-Assistant/discussions) | [🤝 Contribute](./12-contributing.md)
 
 </div> 

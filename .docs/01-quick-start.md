@@ -32,7 +32,7 @@ git --version
 ### Step 1: Clone Repository
 ```bash
 # Clone project
-git clone https://github.com/yourusername/KoalaStore.git
+git clone https://github.com/pemudakoding/Digital-Store-Assistant.git
 cd KoalaStore
 
 # Atau download ZIP dan extract
