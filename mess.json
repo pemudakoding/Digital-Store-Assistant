@@ -1,0 +1,15 @@
+{
+  "wait": "⏳ Tunggu sebentar...",
+  "success": "✅ Berhasil!",
+  "error": "❌ Terjadi kesalahan!",
+  "notFound": "❌ Data tidak ditemukan!",
+  "adminOnly": "❌ Command ini khusus admin!",
+  "ownerOnly": "❌ Command ini khusus owner!",
+  "groupOnly": "❌ Command ini hanya bisa digunakan di grup!",
+  "privateOnly": "❌ Command ini hanya bisa digunakan di chat pribadi!",
+  "wrongFormat": "❌ Format salah! Gunakan: ",
+  "welcome": "👋 Selamat datang di grup!",
+  "goodbye": "👋 Selamat tinggal!",
+  "promote": "🎉 Selamat! Kamu sekarang admin grup!",
+  "demote": "📉 Kamu sudah bukan admin grup lagi!"
+} 

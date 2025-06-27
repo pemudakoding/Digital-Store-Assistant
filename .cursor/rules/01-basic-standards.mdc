@@ -1,0 +1,237 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# .cursor/rules/basic-standards.mdc
+
+## Project Overview
+- **Type**: WhatsApp Bot for Digital Store Management
+- **Tech Stack**: Node.js, ES6 Modules, Baileys WhatsApp Library, Express.js
+- **Target Users**: Digital store owners, customers seeking automated store assistance
+- **Business Domain**: E-commerce automation, customer service, product management
+
+## Code Style
+- **Language**: JavaScript (ES6+ with modern syntax)
+- **Formatting**: Prettier with 2-space indentation
+- **Linting**: ESLint with recommended rules
+- **Naming**: camelCase for variables/functions, PascalCase for classes/components
+- **File naming**: kebab-case for files, PascalCase for class files
+
+## File Organization
+
+### Core Architecture
+```
+src/
+├── commands/           # Bot commands organized by category
+│   ├── admin/         # Administrative commands
+│   ├── calculator/    # Mathematical operations
+│   ├── general/       # General purpose commands
+│   ├── owner/         # Owner-only commands
+│   └── store/         # Store management commands
+├── config/            # Configuration files
+├── handlers/          # Message and command handlers
+├── middleware/        # Authentication and validation middleware
+├── models/            # Data managers (ListManager, TestiManager, etc.)
+├── services/          # Business logic services
+├── utils/             # Utility functions and helpers
+└── WhatsAppBot.js     # Main bot class
+```
+
+### Database Structure
+```
+database/              # JSON-based data storage
+├── list-produk.json   # Product listings
+├── list-testi.json    # Customer testimonials
+├── sewa.json          # Rental/subscription data
+├── set_done.json      # Order completion templates
+├── set_proses.json    # Order processing templates
+└── *.json             # Other data files
+```
+
+### Media Assets
+```
+gambar/                # Images and media files
+├── qris.jpg           # Payment QR code
+├── thumbnail.jpg      # Bot thumbnail
+└── *.jpg, *.mp3       # Media assets
+```
+
+## Development Standards
+
+### Command Structure
+- Each command should be a separate file in appropriate category folder
+- Export default function that accepts (context, args) parameters
+- Include proper error handling and validation
+- Use manager classes for data operations instead of direct database access
+
+### Manager Pattern
+- Use specific managers: `ListManager`, `TestiManager`, `SewaManager`, `AfkManager`
+- Avoid direct `DatabaseManager` usage when specific manager exists
+- Implement proper separation of concerns
+
+### Error Handling
+- Wrap async operations in try-catch blocks
+- Log errors with appropriate context
+- Provide user-friendly error messages
+- Handle WhatsApp-specific errors (connection, rate limits)
+
+### Security Practices
+- Validate all user inputs
+- Implement proper authentication for admin/owner commands
+- Sanitize data before database operations
+- Rate limiting for command usage
+
+## Git Practices
+- **Conventional commits**: feat, fix, docs, style, refactor, test, chore
+- **Branch naming**: feature/task-description, bugfix/issue-description, hotfix/critical-issue
+- **PR size**: Maximum 400 lines for maintainability
+- **Commit message format**: `type(scope): description`
+  - Example: `feat(commands): add product search functionality`
+  - Example: `fix(database): resolve duplicate entry issue`
+
+## Testing Standards
+
+### Unit Testing
+- Test all command functions with mock contexts
+- Verify manager operations with mock data
+- Test error scenarios and edge cases
+- Maintain >80% code coverage for critical paths
+
+### Integration Testing
+- Test complete command workflows
+- Verify database operations
+- Test WhatsApp message handling
+- Validate media processing
+
+## Performance Guidelines
+
+### Bot Responsiveness
+- Commands should respond within 3 seconds
+- Use async/await for all I/O operations
+- Implement proper queuing for heavy operations
+- Cache frequently accessed data
+
+### Memory Management
+- Clean up resources after operations
+- Avoid memory leaks in long-running processes
+- Monitor session data growth
+- Implement proper garbage collection
+
+## Security & Privacy
+
+### Data Protection
+- Never log sensitive user data
+- Encrypt stored credentials
+- Implement data retention policies
+- Handle PII according to privacy laws
+
+### Bot Security
+- Validate all incoming messages
+- Implement rate limiting per user
+- Protect against command injection
+- Secure file upload/download operations
+
+## Documentation Standards
+
+### Code Documentation
+- JSDoc comments for all public functions
+- Clear parameter and return type documentation
+- Include usage examples for complex functions
+- Document business logic and edge cases
+
+### README Requirements
+- Installation and setup instructions
+- Configuration guide
+- Command list with examples
+- Troubleshooting section
+
+## Development Workflow
+
+### Local Development
+- Use hot reload for faster development cycles
+- Test commands in isolated environment
+- Validate database operations before deployment
+- Review code for security vulnerabilities
+
+### Code Review Checklist
+- [ ] Follows established patterns and conventions
+- [ ] Includes appropriate error handling
+- [ ] Has adequate test coverage
+- [ ] Documentation is updated
+- [ ] No security vulnerabilities
+- [ ] Performance impact considered
+
+### Deployment
+- Test in staging environment first
+- Verify database migrations if needed
+- Monitor bot performance after deployment
+- Have rollback plan ready
+
+## Common Patterns
+
+### Command Implementation
+```javascript
+export default async function commandName(context, args) {
+    try {
+        const { messageService, manager } = context;
+        
+        // Validation
+        if (!args.length) {
+            return messageService.reply('Usage: command <parameters>');
+        }
+        
+        // Business logic
+        const result = await manager.operation(args);
+        
+        // Response
+        return messageService.reply(result);
+    } catch (error) {
+        console.error('Command error:', error);
+        return messageService.reply('An error occurred');
+    }
+}
+```
+
+### Manager Usage
+```javascript
+// ✅ Correct - Use specific manager
+const products = await listManager.getListDb();
+
+// ❌ Incorrect - Avoid generic database manager
+const products = await databaseManager.getList();
+```
+
+## Dependencies Management
+
+### Core Dependencies
+- Keep Baileys library updated for WhatsApp compatibility
+- Monitor security advisories for all dependencies
+- Use exact versions for critical dependencies
+- Regular dependency audits
+
+### Development Dependencies
+- Use latest stable versions for dev tools
+- Include proper linting and formatting tools
+- Maintain test framework versions
+- Document required Node.js version
+
+## Monitoring & Logging
+
+### Application Logs
+- Log important bot events (startup, errors, connections)
+- Use structured logging format
+- Implement log rotation
+- Monitor log levels in production
+
+### Performance Metrics
+- Track command response times
+- Monitor memory usage
+- Watch database operation performance
+- Alert on error rate thresholds
+
+---
+
+**Note**: These standards should be reviewed and updated regularly as the project evolves. All team members should follow these guidelines to maintain code quality and consistency. and documentation after process put it on `.specstory/guides/`
+
+
