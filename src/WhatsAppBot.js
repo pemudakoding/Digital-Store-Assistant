@@ -479,6 +479,20 @@ class WhatsAppBot {
                 ownerOnly: true
             }, (await import('./commands/owner/afkstats.js')).default);
 
+            this.commandHandler.register('botstat', {
+                description: 'Show comprehensive bot health statistics',
+                category: 'owner',
+                aliases: ['botstatus', 'health'],
+                ownerOnly: true
+            }, (await import('./commands/owner/botstat.js')).default);
+
+            this.commandHandler.register('resetqueue', {
+                description: 'Reset and clear all bot queues to restore responsiveness',
+                category: 'owner',
+                aliases: ['reset', 'clearqueue'],
+                ownerOnly: true
+            }, (await import('./commands/owner/resetqueue.js')).default);
+
             // More admin commands
             this.commandHandler.register('updatelist', {
                 description: 'Update list item',
