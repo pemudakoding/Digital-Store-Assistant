@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 export default class CommandRegistry {
     constructor(commandHandler) {
         this.commandHandler = commandHandler;
-        this.commandsPath = path.join(__dirname, '..', '..');
+        this.commandsPath = path.join(__dirname, '..');
         this.loadedCommands = new Map();
     }
 
