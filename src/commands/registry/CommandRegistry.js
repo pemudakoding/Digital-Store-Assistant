@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 export default class CommandRegistry {
     constructor(commandHandler) {
         this.commandHandler = commandHandler;
-        this.commandsPath = path.join(__dirname, '..');
+        this.commandsPath = path.join(__dirname, '..', '..');
         this.loadedCommands = new Map();
     }
 
@@ -83,7 +83,7 @@ export default class CommandRegistry {
      */
     async loadCommand(category, commandName) {
         try {
-            const commandPath = `../commands/${category}/${commandName}.js`;
+            const commandPath = `../${category}/${commandName}.js`;
             const commandModule = await import(commandPath);
             
             if (!commandModule.default) {
