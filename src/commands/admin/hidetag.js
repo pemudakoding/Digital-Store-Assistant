@@ -11,6 +11,7 @@
  * - Preserves line breaks in custom messages
  * - Supports multi-line messages for better readability
  * - Tags all group members without individual notifications
+ * - Only forwards the message content without the command word
  */
 async function hidetagCommand(context) {
     const { messageService, from, msg, body, groupMembers, isGroup } = context;
@@ -37,18 +38,22 @@ async function hidetagCommand(context) {
         // Extract member IDs
         const memberIds = groupMembers.map((member) => member.id);
         
-        // Extract message text - preserve line breaks by using original body
+        // Extract message text - properly remove only the hidetag command
         let messageText = "";
         
-        // More robust pattern to match command variants (hidetag, .hidetag, !hidetag, etc.)
-        const commandPattern = /^[.!]?hidetag\s*/i;
+        // More precise pattern to match only the "hidetag" command at the beginning
+        const commandPattern = /^hidetag\s+/i;
         if (body && body.trim().length > 0) {
-            // Remove the command part while keeping everything after it including line breaks
-            const textAfterCommand = body.replace(commandPattern, '');
-            messageText = textAfterCommand;
+            // Remove only the "hidetag" command part while keeping everything after it
+            if (commandPattern.test(body)) {
+                messageText = body.replace(commandPattern, '').trim();
+            } else {
+                // If no hidetag prefix (shouldn't happen), use original body
+                messageText = body;
+            }
         }
         
-        // Use default message if no custom text provided
+        // Use default message if no custom text provided or if text is empty after removing command
         if (!messageText || messageText.trim().length === 0) {
             messageText = "📢 *HIDETAG MESSAGE*\n\nHalo semua! 👋";
         }
