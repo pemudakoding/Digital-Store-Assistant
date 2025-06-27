@@ -20,7 +20,8 @@ class MessageHandler {
             async () => {
                 logger.warn('Fallback: Processing message without queue');
                 return this.processMessage(m);
-            }
+            },
+            'handleMessage'
         );
     }
 
@@ -83,7 +84,8 @@ class MessageHandler {
                             fullArgs: parsed.fullArgs,
                             commandHandler: this.commandHandler
                         });
-                    }
+                    },
+                    `command:${parsed.command}`
                 );
                 return; // Exit after command execution
             }
