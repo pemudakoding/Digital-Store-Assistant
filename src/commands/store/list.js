@@ -14,7 +14,7 @@ export default async function listCommand(context) {
             `• Biar rame diskusinya! 🎉\n\n` +
             `💡 *Solusi:* Gunakan command ini di grup ya kak!`;
         
-        return await messageService.reply(from, creativeMessage, msg);
+        return await messageService.sendMentions(from, creativeMessage, [sender], { quoted: msg });
     }
     
     try {
@@ -56,7 +56,7 @@ export default async function listCommand(context) {
         responseText += `Untuk melihat detail produk silahkan kirim nama produk yang ada pada list di atas.\n`;
         responseText += `💳 *Ketik payment untuk info pembayaran*`;
 
-        await messageService.reply(from, responseText, msg);
+        await messageService.sendMentions(from, responseText, [sender], { quoted: msg });
         
     } catch (error) {
         console.log(error)
