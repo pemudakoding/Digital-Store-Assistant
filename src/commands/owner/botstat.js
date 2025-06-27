@@ -4,15 +4,25 @@ import queueSystem from "../../utils/queue.js";
  * Bot Status command - Comprehensive bot health monitoring
  */
 async function botStatCommand(context) {
-    const { messageService, from, msg, services } = context;
+    const { messageService, from, msg } = context;
     
     try {
+        // Validate required context properties
+        if (!messageService || !from || !msg) {
+            console.error('Bot stats error: Missing required context properties', {
+                hasMessageService: !!messageService,
+                hasFrom: !!from,
+                hasMsg: !!msg
+            });
+            return;
+        }
+        
         // Get queue statistics
         const queueStats = queueSystem.getQueueStats();
         const queueHealth = queueSystem.getQueueHealth();
         
-        // Get message service health
-        const messageHealth = await services.messageService.healthCheck();
+        // Get message service health (use messageService directly from context)
+        const messageHealth = await messageService.healthCheck();
         
         // Get command statistics if available
         const commandStats = context.commandHandler?.getCommandStats?.() || {};
@@ -92,7 +102,15 @@ ${errorCommands.length > 0 ? `⚠️ *TOP ERROR COMMANDS*\n${errorCommands.map((
         
     } catch (error) {
         console.error('Bot stats error:', error);
-        await messageService.reply(from, "❌ Gagal mengambil statistik bot. Silakan coba lagi.", msg);
+        
+        // Try to send error message if messageService is available
+        try {
+            if (messageService && from && msg) {
+                await messageService.reply(from, "❌ Gagal mengambil statistik bot. Silakan coba lagi.", msg);
+            }
+        } catch (replyError) {
+            console.error('Failed to send error reply:', replyError);
+        }
     }
 }
 
