@@ -400,7 +400,7 @@ If you encounter issues:
 
 For additional help, refer to:
 - [PM2 Documentation](https://pm2.keymetrics.io/docs/)
-- [KoalaStore Bot Documentation](.docs/README.md)
+- [KoalaStore Bot Documentation](README.md)
 - [GitHub Issues](https://github.com/yourusername/KoalaStore/issues)
 
 ---
