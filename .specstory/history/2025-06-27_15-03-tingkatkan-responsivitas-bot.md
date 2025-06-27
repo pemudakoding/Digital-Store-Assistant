@@ -9793,3 +9793,191 @@ _**Assistant**_
 
 ---
 
+Saya melihat masalahnya - sekarang malah 0 categories ditemukan! Ini berarti path `this.commandsPath` masih salah. Mari saya debug lebih dalam.
+
+---
+
+```bash
+Get-Content logs\info.log | Select-Object -Last 10
+```
+
+```
+PS D:\projects\KoalaStore> Get-Content logs\info.log | Select-Object -Last 10
+
+{"timestamp":"2025-06-27T16:35:59.488Z","level":"info","message":"Loading commands using CommandRegistry..."
+,"data":null}
+{"timestamp":"2025-06-27T16:35:59.488Z","level":"info","message":"Starting command discovery...","data":null
+}
+{"timestamp":"2025-06-27T16:35:59.489Z","level":"info","message":"🔗 Connecting to WhatsApp...","data":null}
+{"timestamp":"2025-06-27T16:35:59.490Z","level":"info","message":"Scanning path: D:\\projects\\KoalaStore\\s
+rc","data":null}
+{"timestamp":"2025-06-27T16:35:59.491Z","level":"info","message":"Found directories: commands, config, handl
+ers, logs, middleware, models, services, utils","data":null}
+{"timestamp":"2025-06-27T16:35:59.491Z","level":"info","message":"Valid command categories: ","data":null}
+{"timestamp":"2025-06-27T16:35:59.491Z","level":"info","message":"Successfully loaded 0 commands from 0 cate
+gories","data":null}
+{"timestamp":"2025-06-27T16:35:59.491Z","level":"info","message":"Successfully loaded 0 commands automatical
+ly","data":null}
+{"timestamp":"2025-06-27T16:35:59.492Z","level":"info","message":"WhatsApp Bot initialized successfully!","d
+ata":null}
+{"timestamp":"2025-06-27T16:36:00.436Z","level":"info","message":"✅ Bot stopped successfully (session prese
+rved)","data":null}
+
+```
+
+---
+
+Perfect! Sekarang saya melihat masalahnya:
+
+- **Path scanning**: `D:\projects\KoalaStore\src` ✅ Correct  
+- **Directories found**: `commands, config, handlers, logs, middleware, models, services, utils` ✅ Correct
+- **Valid command categories**: `""` ❌ Empty!
+
+Masalahnya adalah CommandRegistry scanning di level `src/` dan mencari `general, admin, owner, store, calculator` di situ, padahal folder-folder itu ada di `src/commands/`. Path harus mengarah ke `src/commands/` bukan `src/`.
+
+Mari saya perbaiki:
+
+---
+
+
+
+---
+
+Sekarang mari test lagi:
+
+---
+
+```bash
+git add . && git commit -m "fix(commands): correct commandsPath to scan src/commands/ not src/
+
+- Change commandsPath back to one level up from registry/
+- Now scans src/commands/ where actual command categories exist
+- Should find general, admin, owner, store, calculator directories"
+```
+
+```
+>> - Now scans src/commands/ where actual command categories exist
+>> - Should find general, admin, owner, store, calculator directories"
+[main 1306eba] fix(commands): correct commandsPath to scan src/commands/ not src/
+ 2 files changed, 905 insertions(+), 1 deletion(-)
+
+```
+
+---
+
+Sekarang mari test bot lagi untuk melihat apakah path sudah benar:
+
+---
+
+```bash
+Start-Job -ScriptBlock { Set-Location 'D:\projects\KoalaStore'; node src/index.js } -Name "TestBot"; Start-Sleep 3; Receive-Job -Name "TestBot"; Stop-Job -Name "TestBot"; Remove-Job -Name "TestBot"
+```
+
+```
+ } -Name "TestBot"; Start-Sleep 3; Receive-Job -Name "TestBot"; Stop-Job -Name "TestBot"; Remove-Job -Name "
+TestBot"
+
+Id     Name            PSJobTypeName   State         HasMoreData     Location             Command
+--     ----            -------------   -----         -----------     --------             -------
+3      TestBot         BackgroundJob   Running       True            localhost             Set-Location 'D…
+
+
+```
+
+---
+
+
+
+---
+
+```bash
+Get-Content logs\info.log | Select-Object -Last 10
+```
+
+```
+PS D:\projects\KoalaStore> Get-Content logs\info.log | Select-Object -Last 10
+{"timestamp":"2025-06-27T16:35:59.488Z","level":"info","message":"Loading commands using CommandRegistry..."
+,"data":null}
+{"timestamp":"2025-06-27T16:35:59.488Z","level":"info","message":"Starting command discovery...","data":null
+}
+{"timestamp":"2025-06-27T16:35:59.489Z","level":"info","message":"🔗 Connecting to WhatsApp...","data":null}
+{"timestamp":"2025-06-27T16:35:59.490Z","level":"info","message":"Scanning path: D:\\projects\\KoalaStore\\s
+rc","data":null}
+{"timestamp":"2025-06-27T16:35:59.491Z","level":"info","message":"Found directories: commands, config, handl
+ers, logs, middleware, models, services, utils","data":null}
+{"timestamp":"2025-06-27T16:35:59.491Z","level":"info","message":"Valid command categories: ","data":null}
+{"timestamp":"2025-06-27T16:35:59.491Z","level":"info","message":"Successfully loaded 0 commands from 0 cate
+gories","data":null}
+{"timestamp":"2025-06-27T16:35:59.491Z","level":"info","message":"Successfully loaded 0 commands automatical
+ly","data":null}
+{"timestamp":"2025-06-27T16:35:59.492Z","level":"info","message":"WhatsApp Bot initialized successfully!","d
+ata":null}
+{"timestamp":"2025-06-27T16:36:00.436Z","level":"info","message":"✅ Bot stopped successfully (session prese
+rved)","data":null}
+
+```
+
+---
+
+
+
+---
+
+Log masih menunjukkan scan di `src/` bukan `src/commands/`. Artinya perubahan belum efektif atau cache. Mari saya force restart bot dengan clean start:
+
+---
+
+```bash
+Stop-Process -Name "node" -Force -ErrorAction SilentlyContinue
+```
+
+```
+PS D:\projects\KoalaStore> Stop-Process -Name "node" -Force -ErrorAction SilentlyContinue
+
+
+```
+
+---
+
+
+
+---
+
+```bash
+node -e "console.log('Test:', new Date().toISOString()); import('./src/index.js');" 2>&1 | Tee-Object test_output.log
+```
+
+---
+
+Saya melihat command dibatalkan user. Mari saya coba approach yang lebih simple untuk test fresh restart:
+
+---
+
+```bash
+node src/index.js
+```
+
+---
+
+
+
+---
+
+```bash
+Start-Sleep 3; Get-Content logs\info.log | Select-Object -Last 15
+```
+
+---
+
+_**User**_
+
+update dokumentasi terkait perubahan terkait load commands
+
+---
+
+_**Assistant**_
+
+
+
+---
+

@@ -237,7 +237,7 @@ const products = await databaseManager.getList();
 - use descriptive name kebab-case
 - cross-reference with other relevant docs
 - keep root directory profesioan and clean
-
+- do not always create new document, if find the relevant and put there no need create new
 **Note**: These standards should be reviewed and updated regularly as the project evolves. All team members should follow these guidelines to maintain code quality and consistency. and documentation after process put it on `.specstory/guides/`
 
 
