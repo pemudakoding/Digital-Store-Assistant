@@ -1,6 +1,6 @@
 # 🐨 KoalaStore Bot v2.0.0
 
-> **WhatsApp Bot untuk Digital Store Management dengan arsitektur modern dan fitur lengkap**
+> **WhatsApp Bot untuk Digital Store Management dengan arsitektur modern dan fitur enterprise-grade**
 
 [![Node.js](https://img.shields.io/badge/Node.js-20.0.0+-green.svg)](https://nodejs.org/)
 [![Baileys](https://img.shields.io/badge/Baileys-6.7.18-blue.svg)](https://github.com/WhiskeySockets/Baileys)
@@ -9,7 +9,7 @@
 
 ## 🚀 Quick Start
 
-Jalankan KoalaStore Bot hanya dalam 5 menit:
+Jalankan KoalaStore Bot hanya dalam 3 menit:
 
 ```bash
 # 1. Clone repository
@@ -19,47 +19,53 @@ cd KoalaStore
 # 2. Install dependencies
 npm install
 
-# 3. Setup configuration
-cp setting.js.example setting.js
-# Edit setting.js dengan konfigurasi Anda
+# 3. Configure environment (optional)
+# Edit src/config/settings.js untuk kustomisasi
 
 # 4. Start bot (Development)
 npm run dev
 
 # 5. Start bot (Production dengan PM2)
-npm start
+npm run pm2:start
 ```
 
 **📖 [Dokumentasi Lengkap →](.docs/README.md)**
 
-## ✨ Fitur Utama
+## ✨ Fitur Terbaru v2.0.0
 
-### 🛍️ **Store Management**
-- **Catalog Management** - Kelola ribuan produk dengan mudah
+### 🛡️ **Enterprise-Grade Reliability**
+- **Queue System** - Semua events di-queue untuk mencegah race conditions
+- **Self-Protection** - Bot tidak akan mengeksekusi command dari dirinya sendiri
+- **Error Recovery** - Automatic retry dengan exponential backoff
+- **Health Monitoring** - Real-time bot status dan performance metrics
+- **Timeout Protection** - Command timeout dengan fallback responses
+
+### 🛍️ **Advanced Store Management**
 - **🖼️ Image Support** - Upload dan manage gambar produk otomatis
 - **Order Processing** - Template otomatis untuk proses dan completion
 - **Payment Integration** - Support DANA, OVO, GoPay, Bank Transfer
 - **Customer Testimonials** - Sistem review dan rating terintegrasi
+- **Product Catalog** - Kelola ribuan produk dengan search dan categories
 
 ### 🤖 **Smart Automation**
 - **😴 AFK System** - Group-scoped AFK dengan auto detection
-- **Command Router** - 50+ commands dengan role-based access
-- **Auto-Response** - Respons otomatis berdasarkan context
-- **Anti-Link Protection** - Proteksi spam dengan whitelist
-- **Group Management** - Welcome, kick, promote, broadcast
+- **Enhanced Commands** - 50+ commands dengan role-based access
+- **Anti-Spam Protection** - Rate limiting dan queue management
+- **Anti-Link Protection** - Proteksi spam dengan whitelist intelligent
+- **Group Management** - Welcome, kick, promote, broadcast otomatis
 
 ### 🎨 **Media & Utilities**
 - **Sticker Maker** - Convert media ke sticker WhatsApp
-- **TikTok Downloader** - Download video/audio TikTok
-- **Gaming Tools** - FF/ML stalking, calculator
+- **TikTok Downloader** - Download video/audio TikTok tanpa watermark
+- **Gaming Tools** - FF/ML stalking, advanced calculator
 - **Social Media** - Integration dengan berbagai platform
 
 ### 🔧 **Developer Experience**
 - **Clean Architecture** - ES6 modules dengan separation of concerns
-- **Hot Reload** - Auto-restart untuk development
-- **Queue System** - Rate limiting dan spam protection
+- **Hot Reload** - Auto-restart untuk development yang cepat
 - **Structured Logging** - Pino logger dengan JSON output
 - **PM2 Ready** - Production deployment non-interactive
+- **Monitoring Commands** - `botstat`, `resetqueue` untuk owner
 
 ## 📦 Tech Stack
 
@@ -70,7 +76,7 @@ npm start
 | **Database** | JSON Files | Simple data storage |
 | **Process Manager** | PM2 | Production deployment |
 | **Logging** | Pino | High-performance logging |
-| **Queue** | p-queue | Rate limiting |
+| **Queue** | p-queue | Rate limiting & race condition prevention |
 
 ## 🎯 Use Cases
 
@@ -108,31 +114,48 @@ Dokumentasi lengkap mencakup:
 npm install pm2 -g
 
 # Start dengan PM2
-npm start
-
-# Atau manual
-pm2 start ecosystem.config.js
+npm run pm2:start
 
 # Monitor
 pm2 monit
 
 # Logs
-pm2 logs KoalaStore-Bot
+pm2 logs koalastore-bot
+
+# Restart
+npm run pm2:restart
 ```
 
-### Menggunakan Docker
+### Development Mode
 ```bash
-# Build image
-docker build -t koalastore-bot .
+# Development dengan hot reload
+npm run dev
 
-# Run container
-docker run -d --name koalastore \
-  -v $(pwd)/database:/app/database \
-  -v $(pwd)/sessionn:/app/sessionn \
-  koalastore-bot
+# Development dengan custom environment
+NODE_ENV=development npm start
+
+# Clean session (jika ada masalah login)
+npm run clean:win  # Windows
+npm run clean      # Linux/Mac
 ```
 
 **📖 [Complete Deployment Guide →](.docs/15-pm2-deployment.md)**
+
+## 🆕 Latest Updates
+
+### v2.0.0 Recent Improvements
+- **✅ Queue System** - Semua events menggunakan queue untuk prevent race conditions
+- **✅ Self-Protection** - Bot tidak lagi merespon command dari dirinya sendiri
+- **✅ Enhanced Error Handling** - Better context validation dan graceful degradation
+- **✅ Monitoring Commands** - `botstat` dan `resetqueue` untuk owner monitoring
+- **✅ Improved Hidetag** - Forward message tanpa command prefix
+- **✅ Timeout Protection** - Commands dengan automatic timeout dan retry
+
+### Performance Improvements
+- **⚡ Faster Response** - Average <500ms response time
+- **🛡️ Better Stability** - Race condition prevention
+- **📊 Real-time Monitoring** - Health checks dan queue statistics
+- **🔄 Auto-Recovery** - Self-healing capabilities
 
 ## 🤝 Contributing
 
@@ -145,7 +168,8 @@ Kami welcome kontribusi! Bacalah panduan berikut:
 ### Development Setup
 ```bash
 # Fork dan clone repository
-git clone https://github.com/pemudakoding/Digital-Store-Assistant.git
+git clone https://github.com/YOUR_USERNAME/Digital-Store-Assistant.git
+cd KoalaStore
 
 # Install dependencies
 npm install
@@ -153,19 +177,24 @@ npm install
 # Start development mode (hot reload)
 npm run dev
 
-# Run tests
-npm test
+# Available scripts
+npm run start          # Production start
+npm run dev            # Development mode
+npm run pm2:start      # Start with PM2
+npm run clean:win      # Clean session (Windows)
+npm run clean          # Clean session (Linux/Mac)
 ```
 
 ## 📊 Project Stats
 
-- **📦 Version**: 2.0.0 (Clean Architecture)
-- **🎯 Commands**: 50+ built-in commands
-- **🖼️ Image Support**: Full product management
-- **😴 AFK System**: Group-scoped functionality  
-- **🚀 PM2 Ready**: Non-interactive production setup
-- **📈 Performance**: <500ms response time
-- **🛡️ Security**: Role-based access control
+- **📦 Version**: 2.0.0 (Enterprise Architecture)
+- **🎯 Commands**: 50+ built-in commands dengan monitoring
+- **🖼️ Image Support**: Full product management dengan auto-upload
+- **😴 AFK System**: Group-scoped functionality dengan auto-detection
+- **🚀 PM2 Ready**: Non-interactive production deployment
+- **📈 Performance**: <500ms response time dengan queue system
+- **🛡️ Security**: Role-based access + self-protection + race condition prevention
+- **🔄 Reliability**: Auto-retry, timeout protection, health monitoring
 
 ## 🆘 Support
 
@@ -175,6 +204,21 @@ npm test
 - **💬 [Discussions](https://github.com/pemudakoding/Digital-Store-Assistant/discussions)** - Community Q&A
 - **📧 Email**: pemudakoding@gmail.com
 
+### Common Commands untuk Troubleshooting
+```bash
+# Check bot status (owner only in chat)
+botstat
+
+# Reset queue jika ada masalah (owner only)
+resetqueue
+
+# Clean session dan restart
+npm run clean:win && npm run pm2:restart
+
+# View logs
+npm run pm2:logs
+```
+
 ## 📄 License
 
 Released under the [MIT License](LICENSE).
@@ -183,11 +227,11 @@ Released under the [MIT License](LICENSE).
 
 <div align="center">
 
-**🐨 Koalastore.digi Bot v2.0.0**  
-*Modern WhatsApp Bot • Production Ready • Open Source*
+**🐨 KoalaStore Bot v2.0.0**  
+*Enterprise WhatsApp Bot • Production Ready • Open Source*
 
 [📖 Documentation](.docs/README.md) • [🚀 Quick Start](.docs/01-quick-start.md) • [🤝 Contributing](.docs/12-contributing.md) • [🆘 Support](#-support)
 
-**Made with ❤️ by the KoalaStore.digi Team**
+**Made with ❤️ by the KoalaStore Team**
 
 </div> 
