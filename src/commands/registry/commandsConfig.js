@@ -327,6 +327,11 @@ export const commandsConfig = {
             description: 'Show command registry information and statistics',
             aliases: ['cmdinfo', 'commandstats'],
             ownerOnly: true
+        },
+        queuemonitor: {
+            description: 'Advanced queue monitoring and management with timeout analysis',
+            aliases: ['qmon', 'queuemon'],
+            ownerOnly: true
         }
     }
 };
