@@ -55,13 +55,20 @@ export default class CommandRegistry {
         try {
             const items = await fs.readdir(this.commandsPath, { withFileTypes: true });
             const validCategories = ['general', 'admin', 'owner', 'store', 'calculator'];
-            return items
+            
+            logger.info(`Scanning path: ${this.commandsPath}`);
+            logger.info(`Found directories: ${items.filter(item => item.isDirectory()).map(item => item.name).join(', ')}`);
+            
+            const filteredCategories = items
                 .filter(item => 
                     item.isDirectory() && 
                     !item.name.startsWith('.') && 
                     validCategories.includes(item.name)
                 )
                 .map(item => item.name);
+                
+            logger.info(`Valid command categories: ${filteredCategories.join(', ')}`);
+            return filteredCategories;
         } catch (error) {
             logger.error('Error reading command categories:', error);
             return [];
