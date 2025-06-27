@@ -22,10 +22,10 @@ const messages = {
     },
     
     welcome: {
-        promote: (name, groupName) => `*@${name} Naik jabatan jadi pejabat grup*`,
-        demote: (name, groupName) => `*@${name} Turun jabatan menjadi rakyat jelata*`,
-        join: (name, groupName) => `*Welcome To ${groupName}* @${name}\nKetik *list* untuk lihat daftar menu yang tersedia!\nKetik *payment* untuk pembayaran!`,
-        leave: (name, groupName) => `*SAMPAI JUMPA* 👋 @${name}\nTerima kasih telah bergabung dengan ${groupName}`
+        promote: (name, groupName) => `🎉 *SELAMAT!* @${name} mendapat promosi jadi *ADMIN* 👑\n_Level up successful!_ ✨`,
+        demote: (name, groupName) => `📉 @${name} kembali ke status *MEMBER* biasa\n_Back to basics!_ 🔄`,
+        join: (name, groupName) => `🔥 *HAI KAWAN!* @${name} 🔥\n━━━━━━━━━━━━━━━━━━\n✨ Welcome to *${groupName}* ✨\n\n💫 *Quick Start:*\n📋 Ketik *list* → Lihat semua produk keren\n💳 Ketik *payment* → Info pembayaran\n\n_Let's shopping! 🛒_`,
+        leave: (name, groupName) => `😢 *GOODBYE KAWAN!* 👋\n@${name} telah meninggalkan *${groupName}*\n\n_Semoga kita berjumpa lagi! Until next time! 💫_`
     },
     
     buttons: {
