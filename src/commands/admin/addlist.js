@@ -1,37 +1,52 @@
 /**
  * Add list command - Add item to store list with optional image support
  * Usage: addlist product_name|description (with or without image)
+ * 
+ * Features:
+ * - Preserves line breaks in product descriptions
+ * - Supports multi-line descriptions for better formatting
+ * - Optional image upload support
  */
 import { downloadContentFromMessage } from "baileys";
 
 async function addListCommand(context) {
-    const { messageService, listManager, from, msg, args, fullArgs, client, isQuotedMsg, quotedMsg } = context;
+    const { messageService, listManager, from, msg, body, client, isQuotedMsg, quotedMsg } = context;
     
     try {
-        // Check if using pipe separator format (args will be parsed by CommandHandler)
-        if (args.length < 2) {
-            const usage = "*Cara penggunaan:*\n";
-            usage += "addlist <nama_produk>|<deskripsi>\n\n";
-            usage += "*Contoh:*\n";
-            usage += "addlist Netflix|Premium Account Netflix 1 Bulan - Rp 25.000\n";
-            usage += "addlist Diamond ML|Top up Diamond Mobile Legends - Rp 10.000\n\n";
-            usage += "*Untuk menambahkan gambar:*\n";
-            usage += "1. Kirim gambar bersamaan dengan command\n";
-            usage += "2. Reply gambar dengan command addlist\n";
-            usage += "3. Gambar akan otomatis ter-upload dan tersimpan";
+        // Extract content from original body to preserve line breaks
+        const commandPattern = /^[.!]?addlist\s*/i;
+        const contentAfterCommand = body.replace(commandPattern, '').trim();
+        
+        // Check if content contains pipe separator
+        if (!contentAfterCommand.includes('|')) {
+            const usage = "*Cara penggunaan:*\n" +
+                "addlist <nama_produk>|<deskripsi>\n\n" +
+                "*Contoh:*\n" +
+                "addlist Netflix|Premium Account Netflix 1 Bulan - Rp 25.000\n" +
+                "addlist Diamond ML|Top up Diamond Mobile Legends\n" +
+                "Promo spesial hari ini!\n" +
+                "✅ Instant delivery\n" +
+                "✅ 24/7 support\n\n" +
+                "*Untuk menambahkan gambar:*\n" +
+                "1. Kirim gambar bersamaan dengan command\n" +
+                "2. Reply gambar dengan command addlist\n" +
+                "3. Gambar akan otomatis ter-upload dan tersimpan";
             
             return await messageService.reply(from, usage, msg);
         }
 
-        // With pipe separator, args[0] = productName, args[1] = description
-        const productName = args[0];
-        const description = args[1];
+        // Split by first pipe only to preserve pipes in description
+        const firstPipeIndex = contentAfterCommand.indexOf('|');
+        const productName = contentAfterCommand.substring(0, firstPipeIndex).trim();
+        const description = contentAfterCommand.substring(firstPipeIndex + 1);
         
-        if (!productName || !description) {
-            const usage = "*Format salah!*\n";
-            usage += "Gunakan: addlist <nama_produk>|<deskripsi>\n\n";
-            usage += "*Contoh:*\n";
-            usage += "addlist Netflix|Premium Account Netflix 1 Bulan - Rp 25.000";
+        if (!productName || !description.trim()) {
+            const usage = "*Format salah!*\n" +
+                "Gunakan: addlist <nama_produk>|<deskripsi>\n\n" +
+                "*Contoh:*\n" +
+                "addlist Netflix|Premium Account Netflix 1 Bulan\n" +
+                "Harga: Rp 25.000\n" +
+                "Garansi: 30 hari";
             
             return await messageService.reply(from, usage, msg);
         }
@@ -79,11 +94,11 @@ async function addListCommand(context) {
             await messageService.reply(from, "⚠️ *Gagal mengupload gambar, produk akan ditambahkan tanpa gambar.*", msg);
         }
 
-        // Add new product
+        // Add new product (preserve line breaks in description)
         listManager.addResponList(from, productName, description, isImage, imageUrl, listData);
         
         let successMessage = `✅ *Berhasil menambahkan produk* *${productName}* *ke dalam list!*\n\n`;
-        successMessage += `📝 *Deskripsi:* ${description}\n`;
+        successMessage += `📝 *Deskripsi:*\n${description}\n\n`;
         
         if (isImage && imageUrl) {
             successMessage += `🖼️ *Gambar:* Berhasil diupload!\n`;
