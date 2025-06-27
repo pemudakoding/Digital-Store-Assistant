@@ -80,6 +80,49 @@ class CommandHandler {
     }
 
     /**
+     * Unregister a command and its aliases
+     */
+    unregister(name) {
+        if (!name || typeof name !== 'string') {
+            logger.error('Command unregistration failed: Invalid command name');
+            return false;
+        }
+
+        const command = this.commands.get(name);
+        if (!command) {
+            logger.warn(`Command not found for unregistration: ${name}`);
+            return false;
+        }
+
+        // Remove aliases
+        if (command.aliases && Array.isArray(command.aliases)) {
+            command.aliases.forEach(alias => {
+                this.aliases.delete(alias);
+            });
+        }
+
+        // Remove command and stats
+        this.commands.delete(name);
+        this.commandStats.delete(name);
+
+        logger.debug(`Unregistered command: ${name}`);
+        return true;
+    }
+
+    /**
+     * Clear all commands and aliases
+     */
+    clearAll() {
+        const commandCount = this.commands.size;
+        this.commands.clear();
+        this.aliases.clear();
+        this.commandStats.clear();
+        
+        logger.debug(`Cleared ${commandCount} commands`);
+        return commandCount;
+    }
+
+    /**
      * Get command by name or alias with fallback
      */
     getCommand(name) {
