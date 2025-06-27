@@ -67,7 +67,7 @@ async function checkEnvironment() {
     log('✅ Required directories - OK', 'green');
     
     // Check essential files
-    const requiredFiles = ['setting.js', 'src/WhatsAppBot.js'];
+    const requiredFiles = ['src/config/settings.js', 'src/WhatsAppBot.js'];
     for (const file of requiredFiles) {
         if (!fs.existsSync(file)) {
             log(`❌ Required file missing: ${file}`, 'red');
