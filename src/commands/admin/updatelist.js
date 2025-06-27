@@ -4,17 +4,30 @@ import { downloadContentFromMessage } from "baileys";
 /**
  * Update list command - Update existing list item with optional image support
  * Usage: updatelist key|new_description (with or without image)
+ * 
+ * Features:
+ * - Preserves line breaks in product descriptions
+ * - Supports multi-line descriptions for better formatting
+ * - Optional image update support
  */
 export default async function updateListCommand(context) {
-    const { messageService, listManager, from, msg, args, fullArgs, client, isQuotedMsg, quotedMsg } = context;
+    const { messageService, listManager, from, msg, body, client, isQuotedMsg, quotedMsg } = context;
     
     try {
-        if (args.length < 2) {
+        // Extract content from original body to preserve line breaks
+        const commandPattern = /^[.!]?updatelist\s*/i;
+        const contentAfterCommand = body.replace(commandPattern, '').trim();
+        
+        // Check if content contains pipe separator
+        if (!contentAfterCommand.includes('|')) {
             return await messageService.reply(from,
                 "*Cara penggunaan:*\n" +
                 "updatelist *key*|*response*\n\n" +
                 "*Contoh:*\n" +
-                "updatelist netflix|Netflix Premium 1 Bulan - Updated\n\n" +
+                "updatelist netflix|Netflix Premium 1 Bulan - Updated\n" +
+                "Harga baru: Rp 30.000\n" +
+                "✅ Garansi 1 bulan\n" +
+                "✅ Support 24/7\n\n" +
                 "*Untuk update dengan gambar:*\n" +
                 "1. Kirim gambar bersamaan dengan command\n" +
                 "2. Reply gambar dengan command updatelist\n" +
@@ -23,8 +36,21 @@ export default async function updateListCommand(context) {
             );
         }
 
-        const productKey = args[0];
-        const newDescription = args[1];
+        // Split by first pipe only to preserve pipes in description
+        const firstPipeIndex = contentAfterCommand.indexOf('|');
+        const productKey = contentAfterCommand.substring(0, firstPipeIndex).trim();
+        const newDescription = contentAfterCommand.substring(firstPipeIndex + 1);
+        
+        if (!productKey || !newDescription.trim()) {
+            return await messageService.reply(from,
+                "*Format salah!*\n" +
+                "Gunakan: updatelist *key*|*response*\n\n" +
+                "*Contoh:*\n" +
+                "updatelist netflix|Netflix Premium 1 Bulan\n" +
+                "Update terbaru dengan fitur baru!",
+                msg
+            );
+        }
         
         const db_respon_list = listManager.getListDb();
         
@@ -83,11 +109,11 @@ export default async function updateListCommand(context) {
             imageUrl = existingItem?.image_url || '';
         }
 
-        // Update list item
+        // Update list item (preserve line breaks in description)
         listManager.updateResponList(from, productKey, newDescription, isImage, imageUrl, db_respon_list);
         
         let successMessage = `✅ *Berhasil update List* *${productKey}*\n\n`;
-        successMessage += `📝 *Deskripsi Baru:* ${newDescription}\n`;
+        successMessage += `📝 *Deskripsi Baru:*\n${newDescription}\n\n`;
         successMessage += `${imageStatusMessage}\n`;
         
         if (isImage && imageUrl) {
