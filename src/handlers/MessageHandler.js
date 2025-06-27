@@ -35,6 +35,13 @@ class MessageHandler {
             // Create message context
             const context = await this.createContext(msg);
             
+            // Prevent bot from processing its own messages
+            const botId = this.client.user?.id?.split(":")[0] + "@s.whatsapp.net";
+            if (context.sender === botId) {
+                logger.debug(`Ignoring self-message from bot: ${context.sender}`);
+                return;
+            }
+            
             // Prevent spam processing (max 1 message per user per second)
             const userId = context.sender;
             const now = Date.now();
