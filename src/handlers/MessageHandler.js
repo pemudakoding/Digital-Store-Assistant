@@ -88,9 +88,6 @@ class MessageHandler {
                 return; // Exit after command execution
             }
 
-            // Enhanced command detection for partial matches
-            await this.handlePartialCommandMatch(context);
-
             // Check AFK mentions (when someone mentions/replies to AFK users)
             await this.handleAfkMentions(context);
 
@@ -455,49 +452,6 @@ class MessageHandler {
                 logger.error("Error checking product key", error);
             }
         });
-    }
-
-    /**
-     * Handle partial command matches and provide suggestions
-     */
-    async handlePartialCommandMatch(context) {
-        try {
-            const { body, messageService, from, msg } = context;
-            
-            if (!body || body.length < 2) return;
-            
-            const inputCommand = body.toLowerCase().trim();
-            const allCommands = this.commandHandler.getCommands();
-            
-            // Find similar commands (fuzzy matching)
-            const suggestions = allCommands
-                .filter(cmd => {
-                    const cmdName = cmd.name.toLowerCase();
-                    const aliases = cmd.aliases || [];
-                    
-                    // Check if input is similar to command name or aliases
-                    return cmdName.includes(inputCommand) || 
-                           inputCommand.includes(cmdName) ||
-                           aliases.some(alias => alias.toLowerCase().includes(inputCommand) || 
-                                                inputCommand.includes(alias.toLowerCase()));
-                })
-                .slice(0, 3); // Limit to 3 suggestions
-            
-            // If we found suggestions, send them
-            if (suggestions.length > 0 && inputCommand.length >= 3) {
-                const suggestionText = suggestions
-                    .map(cmd => `• ${cmd.name} - ${cmd.description}`)
-                    .join('\n');
-                
-                const responseMessage = `🤔 Apakah Anda mencari:\n\n${suggestionText}\n\n💡 Ketik *help* untuk melihat semua perintah yang tersedia.`;
-                
-                await messageService.reply(from, responseMessage, msg);
-                logger.info(`Provided command suggestions for: ${inputCommand}`);
-            }
-            
-        } catch (error) {
-            logger.error("Error in partial command matching:", error);
-        }
     }
 }
 
