@@ -563,14 +563,14 @@ class WhatsAppBot {
      * Setup event handlers
      */
     setupEventHandlers() {
-        // Connection updates
+        // Connection updates - use queue to prevent race conditions
         this.client.ev.on("connection.update", (update) => {
-            this.handleConnectionUpdate(update);
+            queue.add(() => this.handleConnectionUpdate(update));
         });
 
-        // Messages - use message handler's built-in queue
+        // Messages - use queue for all message processing
         this.client.ev.on("messages.upsert", (m) => {
-            this.messageHandler.handleMessage(m);
+            queue.add(() => this.messageHandler.handleMessage(m));
         });
 
         // Group participant updates - use queue
@@ -578,7 +578,7 @@ class WhatsAppBot {
             queue.add(() => this.handleGroupUpdate(update));
         });
 
-        // Store events
+        // Store events - bind to client events
         this.store.bind(this.client.ev);
     }
 
@@ -586,93 +586,97 @@ class WhatsAppBot {
      * Handle connection updates
      */
     async handleConnectionUpdate({ connection, lastDisconnect, qr }) {
-        // Handle QR code display for NEW sessions only
-        if (qr && !config.bot.usePairingCode) {
-            // Only show QR if we don't have valid session
-            const sessionPath = './sessionn';
-            const credsPath = `${sessionPath}/creds.json`;
-            
-            if (!fs.existsSync(credsPath)) {
-                if (!QRCode) {
-                    QRCode = (await import('qrcode-terminal')).default;
-                }
-                QRCode.generate(qr, { small: true });
-                logger.info('🔗 Scan QR code above to connect (first time setup)');
-            } else {
-                logger.info('📱 QR generated but session exists - reconnecting...');
-            }
-        }
-
-        switch (connection) {
-            case "open":
-                logger.success(`✅ Bot connected as ${this.client.user?.id?.split(":")[0]}`);
-                // Reset reconnection attempts on successful connection
-                this.reconnectAttempts = 0;
-                this.reconnectDelay = 3000;
-                this.isConnecting = false;
-                break;
-            case "close":
-                this.isConnecting = false;
-                const statusCode = lastDisconnect?.error?.output?.statusCode;
-                const currentTime = Date.now();
+        try {
+            // Handle QR code display for NEW sessions only
+            if (qr && !config.bot.usePairingCode) {
+                // Only show QR if we don't have valid session
+                const sessionPath = './sessionn';
+                const credsPath = `${sessionPath}/creds.json`;
                 
-                // Prevent rapid reconnection attempts
-                if (currentTime - this.lastDisconnectTime < 5000) {
-                    logger.warn("⏱️ Rapid disconnection detected, waiting before reconnect...");
-                    this.lastDisconnectTime = currentTime;
-                    return;
-                }
-                this.lastDisconnectTime = currentTime;
-                
-                if (statusCode === 401) {
-                    // Session invalidated - manual logout or banned
-                    logger.error("🚫 Session invalidated (logged out from another device or banned)");
-                    logger.info("💡 Please delete sessionn folder and restart bot");
-                    return;
-                } else if (statusCode === 403) {
-                    // Device not authorized
-                    logger.error("❌ Device not authorized - please re-authenticate");
-                    logger.info("💡 Please delete sessionn folder and restart bot");
-                    return;
-                } else if (statusCode === 428) {
-                    // Connection replaced by another session
-                    logger.warn("🔄 Connection replaced by another session");
-                    logger.info("💡 Another WhatsApp session is active. Close other sessions first.");
-                    return;
-                } else if (statusCode === 515) {
-                    // Need to restart/refresh session
-                    logger.warn("🔄 Session needs refresh - reconnecting...");
-                    setTimeout(() => {
-                        if (!this.isConnecting) {
-                            this.attemptReconnect();
-                        }
-                    }, 2000);
-                    return;
-                } else if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-                    // Max reconnection attempts reached
-                    logger.error(`❌ Max reconnection attempts (${this.maxReconnectAttempts}) reached. Stopping bot.`);
-                    logger.info("💡 Please check your internet connection and restart manually");
-                    return;
+                if (!fs.existsSync(credsPath)) {
+                    if (!QRCode) {
+                        QRCode = (await import('qrcode-terminal')).default;
+                    }
+                    QRCode.generate(qr, { small: true });
+                    logger.info('🔗 Scan QR code above to connect (first time setup)');
                 } else {
-                    // Attempt reconnection with exponential backoff
-                    this.reconnectAttempts++;
-                    const delay = Math.min(this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1), 30000); // Max 30s
-                    
-                    logger.warn(`🔄 Connection closed (${statusCode || 'unknown'}), attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts} in ${delay/1000}s...`);
-                    
-                    setTimeout(() => {
-                        if (!this.isConnecting) {
-                            this.attemptReconnect();
-                        }
-                    }, delay);
+                    logger.info('📱 QR generated but session exists - reconnecting...');
                 }
-                break;
-            case "connecting":
-                if (!this.isConnecting) {
-                    this.isConnecting = true;
-                    logger.info("🔗 Connecting to WhatsApp...");
-                }
-                break;
+            }
+
+            switch (connection) {
+                case "open":
+                    logger.success(`✅ Bot connected as ${this.client.user?.id?.split(":")[0]}`);
+                    // Reset reconnection attempts on successful connection
+                    this.reconnectAttempts = 0;
+                    this.reconnectDelay = 3000;
+                    this.isConnecting = false;
+                    break;
+                case "close":
+                    this.isConnecting = false;
+                    const statusCode = lastDisconnect?.error?.output?.statusCode;
+                    const currentTime = Date.now();
+                    
+                    // Prevent rapid reconnection attempts
+                    if (currentTime - this.lastDisconnectTime < 5000) {
+                        logger.warn("⏱️ Rapid disconnection detected, waiting before reconnect...");
+                        this.lastDisconnectTime = currentTime;
+                        return;
+                    }
+                    this.lastDisconnectTime = currentTime;
+                    
+                    if (statusCode === 401) {
+                        // Session invalidated - manual logout or banned
+                        logger.error("🚫 Session invalidated (logged out from another device or banned)");
+                        logger.info("💡 Please delete sessionn folder and restart bot");
+                        return;
+                    } else if (statusCode === 403) {
+                        // Device not authorized
+                        logger.error("❌ Device not authorized - please re-authenticate");
+                        logger.info("💡 Please delete sessionn folder and restart bot");
+                        return;
+                    } else if (statusCode === 428) {
+                        // Connection replaced by another session
+                        logger.warn("🔄 Connection replaced by another session");
+                        logger.info("💡 Another WhatsApp session is active. Close other sessions first.");
+                        return;
+                    } else if (statusCode === 515) {
+                        // Need to restart/refresh session
+                        logger.warn("🔄 Session needs refresh - reconnecting...");
+                        setTimeout(() => {
+                            if (!this.isConnecting) {
+                                this.attemptReconnect();
+                            }
+                        }, 2000);
+                        return;
+                    } else if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+                        // Max reconnection attempts reached
+                        logger.error(`❌ Max reconnection attempts (${this.maxReconnectAttempts}) reached. Stopping bot.`);
+                        logger.info("💡 Please check your internet connection and restart manually");
+                        return;
+                    } else {
+                        // Attempt reconnection with exponential backoff
+                        this.reconnectAttempts++;
+                        const delay = Math.min(this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1), 30000); // Max 30s
+                        
+                        logger.warn(`🔄 Connection closed (${statusCode || 'unknown'}), attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts} in ${delay/1000}s...`);
+                        
+                        setTimeout(() => {
+                            if (!this.isConnecting) {
+                                this.attemptReconnect();
+                            }
+                        }, delay);
+                    }
+                    break;
+                case "connecting":
+                    if (!this.isConnecting) {
+                        this.isConnecting = true;
+                        logger.info("🔗 Connecting to WhatsApp...");
+                    }
+                    break;
+            }
+        } catch (error) {
+            logger.error("Error handling connection update:", error);
         }
     }
 
