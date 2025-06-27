@@ -60,7 +60,7 @@ class GroupService {
     async updateGroupSettings(groupId, setting) {
         return groupQueue.add(async () => {
             try {
-                return await this.client.groupSettingsUpdate(groupId, setting);
+                return await this.client.groupSettingUpdate(groupId, setting);
             } catch (error) {
                 logger.error(`Failed to update group settings for ${groupId}`, error);
                 throw error;
