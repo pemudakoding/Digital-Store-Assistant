@@ -1,222 +1,284 @@
 # 🚀 Quick Start Guide
 
-Panduan cepat untuk menjalankan **KoalaStore Bot v2.0.0** dalam 5 menit! Guide ini akan membantu Anda setup dan menjalankan bot dengan konfigurasi dasar.
+Dapatkan **KoalaStore Bot v2.0.0** berjalan dalam 3 menit dengan enterprise-grade features!
 
-## 📋 Prerequisites
+## ⚡ Super Fast Setup
 
-Pastikan Anda sudah memiliki:
-
+### 1. **Clone Repository**
 ```bash
-✅ Node.js 20.0.0 atau lebih baru
-✅ npm atau yarn package manager
-✅ Git untuk cloning repository
-✅ WhatsApp account untuk bot
-✅ Koneksi internet yang stabil
-✅ Text editor (VS Code, Sublime, dll)
-```
-
-### Cek Requirements
-```bash
-# Cek versi Node.js
-node --version  # harus >= 20.0.0
-
-# Cek npm
-npm --version
-
-# Cek git
-git --version
-```
-
-## ⚡ 5-Minute Setup
-
-### Step 1: Clone Repository
-```bash
-# Clone project
 git clone https://github.com/pemudakoding/Digital-Store-Assistant.git
 cd KoalaStore
-
-# Atau download ZIP dan extract
 ```
 
-### Step 2: Install Dependencies
+### 2. **Install Dependencies**
 ```bash
-# Install semua dependencies
 npm install
-
-# Tunggu hingga selesai (biasanya 2-3 menit)
 ```
 
-### Step 3: Basic Configuration
+### 3. **Start Bot**
 ```bash
-# Copy dan edit file konfigurasi
-cp setting.js setting.js.backup  # backup original
-nano setting.js  # atau gunakan editor favorit Anda
+# Development mode (dengan hot reload)
+npm run dev
+
+# Production mode
+npm start
+
+# Production dengan PM2
+npm run pm2:start
 ```
 
-Edit `setting.js` dengan informasi Anda:
+**🎉 Selesai!** Bot siap digunakan dalam hitungan menit!
+
+## 🎯 Verifikasi Setup
+
+### Check Bot Status
+Setelah bot running, test di WhatsApp:
+
+```
+# Command untuk owner (pastikan edit config dulu)
+botstat
+
+# Response yang diharapkan:
+🤖 BOT STATUS REPORT
+🟢 Overall Health: Excellent (100%)
+⏰ Uptime: 1 minutes
+...
+```
+
+### Test Basic Commands
+```
+# Test commands dasar
+ping
+help
+allmenu
+```
+
+## 🔧 Konfigurasi (Opsional)
+
+Bot dapat berjalan dengan default settings, tetapi untuk production sebaiknya customize:
+
+### Edit Configuration
+```bash
+# Edit file konfigurasi
+nano src/config/settings.js
+```
+
+### Key Settings
 ```javascript
-const setting = {
-  ownerName: "Nama Toko Anda",
-  ownerNumber: ["628123456789"], // GANTI dengan nomor WhatsApp Anda
-  botName: "Bot Toko Anda",
-  storeName: "🏪 NAMA TOKO ANDA",
-  storeDescription: "Digital Solutions & Services",
-  public: true, // true = semua bisa pakai, false = hanya owner
+const config = {
+    bot: {
+        ownerNumber: "628xxxxxxxxxxxx@s.whatsapp.net", // Nomor owner
+        botName: "KoalaStore Assistant",                 // Nama bot
+        usePairingCode: true                            // false untuk QR code
+    },
+    payment: {
+        dana: "08xxxxxxxxxxxx",                         // Nomor DANA
+        ovo: "08xxxxxxxxxxxx",                          // Nomor OVO
+        gopay: "08xxxxxxxxxxxx"                         // Nomor GoPay
+    }
 };
 ```
 
-### Step 4: Run Bot
+## 📱 Pairing dengan WhatsApp
+
+Bot mendukung 2 metode koneksi:
+
+### Method 1: Pairing Code (Recommended)
 ```bash
-# Jalankan bot
+# Set usePairingCode: true di config
 npm start
 
-# Atau untuk development dengan hot reload
-npm run dev
+# Masukkan nomor WhatsApp (awali dengan 62)
+# Contoh: 6285xxxxxxxxx
 ```
 
-### Step 5: Connect WhatsApp
-1. **QR Code akan muncul** di terminal
-2. **Buka WhatsApp** di phone Anda
-3. **Pergi ke** Menu (⋮) → **Linked Devices**
-4. **Tap "Link a Device"**
-5. **Scan QR Code** yang muncul di terminal
-6. **Bot Connected!** ✅
-
-## 🎮 Test Bot
-
-Setelah terhubung, test bot dengan mengirim pesan:
-
+### Method 2: QR Code
 ```bash
-# Kirim ke bot (private chat atau grup):
-help           # Menu bantuan
+# Set usePairingCode: false di config
+npm start
+
+# Scan QR code yang muncul di terminal
+```
+
+## 🚀 Production Deployment
+
+### Menggunakan PM2
+```bash
+# Install PM2 globally
+npm install pm2 -g
+
+# Start dengan PM2
+npm run pm2:start
+
+# Monitor
+pm2 monit
+
+# Logs
+npm run pm2:logs
+```
+
+**📖 [Complete Deployment Guide →](./15-pm2-deployment.md)**
+
+## ✨ Fitur Terbaru v2.0.0
+
+### 🛡️ **Enterprise Reliability**
+- **Queue System** - Semua events menggunakan queue untuk prevent race conditions
+- **Self-Protection** - Bot tidak merespon command dari dirinya sendiri
+- **Error Recovery** - Automatic retry dengan exponential backoff
+- **Health Monitoring** - Real-time bot health dengan `botstat` command
+
+### 📊 **Monitoring Commands**
+```bash
+# Check bot health (owner only)
+botstat
+
+# Emergency queue reset (owner only)  
+resetqueue
+
+# View performance stats
+npm run pm2:monit
+```
+
+### 🎮 **Enhanced Commands**
+- **50+ Commands** dengan role-based access
+- **Improved Hidetag** - Forward message tanpa command prefix
+- **Advanced Calculator** - Operasi matematika lengkap
+- **Media Processing** - Sticker maker, TikTok downloader
+
+### 🛍️ **Store Features**
+- **Product Management** - Kelola catalog dengan images
+- **Order Processing** - Template untuk proses dan completion
+- **Payment Integration** - DANA, OVO, GoPay, Bank
+- **Customer Reviews** - Testimonial system
+
+## 🎯 First Steps After Setup
+
+### 1. **Configure as Owner**
+```bash
+# Edit owner number di src/config/settings.js
+ownerNumber: "628xxxxxxxxxxxx@s.whatsapp.net"
+```
+
+### 2. **Test Basic Functions**
+```
+# Di WhatsApp, test commands:
+help           # Lihat semua commands
+allmenu        # Menu lengkap
+botstat        # Health check (owner only)
 ping           # Test response time
-owner          # Info kontak owner
 ```
 
-**Jika bot merespons, selamat! Setup berhasil! 🎉**
+### 3. **Setup Store (Optional)**
+```
+# Add products
+addproduk nama|harga|deskripsi
 
-## 🛠️ Configuration Options
+# Add testimonials  
+addtesti nama|rating|review
 
-### Environment Variables (.env)
-Buat file `.env` untuk konfigurasi advanced:
-```env
-# Bot Configuration
-OWNER_NUMBER=628123456789
-STORE_NAME=Your Store Name
-BOT_NAME=Store Bot
-PORT=3000
-
-# Payment Info
-DANA_NUMBER=08123456789
-OVO_NUMBER=08123456789
-GOPAY_NUMBER=08123456789
-
-# Social Links
-YOUTUBE_LINK=https://youtube.com/@yourchannel
-INSTAGRAM_LINK=https://instagram.com/youraccount
+# Set payment methods
+payment         # Lihat info pembayaran
 ```
 
-### Database Setup
-Bot menggunakan JSON files sebagai database (sudah auto-generated):
+### 4. **Group Management**
 ```
-database/
-├── list-produk.json    # Product catalog
-├── list-testi.json     # Customer testimonials  
-├── sewa.json          # Rental/subscription data
-├── set_done.json      # Order completion templates
-└── set_proses.json    # Order processing templates
+# Add bot ke group
+# Set as admin
+# Test group commands:
+welcome on      # Enable welcome messages
+antilink on     # Enable anti-link protection
+hidetag test    # Test broadcast to all members
 ```
 
-## 🔧 Development Mode
+## 🔧 Troubleshooting
 
-Untuk development dengan hot reload:
+### Common Issues
 
+#### 1. **Session Issues**
 ```bash
-# Start development mode
-npm run dev
-
-# Bot akan auto-restart saat ada perubahan file
-```
-
-## 📱 Adding to Groups
-
-1. **Add bot ke grup** WhatsApp
-2. **Jadikan admin** (untuk fitur moderasi)
-3. **Test commands**:
-   ```bash
-   list          # Lihat daftar produk
-   help          # Menu bantuan grup
-   ```
-
-## 🎯 Next Steps
-
-Setelah setup dasar berhasil:
-
-1. **📖 [Configuration Guide](./03-configuration.md)** - Kustomisasi advanced
-2. **🎮 [Commands Guide](./07-commands.md)** - Pelajari semua fitur
-3. **🛍️ [Store Management](./10-store-management.md)** - Kelola produk dan customer
-4. **🔧 [Deployment Guide](./16-deployment.md)** - Deploy ke production
-
-## ⚠️ Common Issues
-
-### Bot tidak connect?
-```bash
-# Clean session dan coba lagi
-npm run clean       # Linux/Mac
-npm run clean:win   # Windows
-
-# Restart bot
+# Clean session dan restart
+npm run clean:win    # Windows
+npm run clean        # Linux/Mac
 npm start
 ```
 
-### Permission errors?
+#### 2. **Permission Issues (Linux/Mac)**
 ```bash
-# Fix file permissions
-sudo chmod -R 755 .
-npm install
+# Fix permissions
+chmod +x start.js
+sudo npm install -g pm2
 ```
 
-### Port already in use?
+#### 3. **Bot Not Responding**
 ```bash
-# Kill existing Node processes
-npm run kill        # Windows
-pkill node          # Linux/Mac
+# Check if running
+npm run pm2:status
+
+# Restart if needed
+npm run pm2:restart
+
+# View logs for errors
+npm run pm2:logs
 ```
 
-### Dependencies error?
+#### 4. **High Memory Usage**
 ```bash
-# Clear cache dan reinstall
-npm cache clean --force
-rm -rf node_modules package-lock.json
-npm install
+# Check bot health
+botstat
+
+# Reset queues if needed
+resetqueue
+
+# Restart if critical
+npm run pm2:restart
 ```
 
-## 🆘 Getting Help
+## 📚 Next Steps
 
-Jika mengalami masalah:
+### For Store Owners
+1. **[Store Management Guide](./10-store-management.md)** - Kelola products dan orders
+2. **[Payment Integration](./03-configuration.md#payment)** - Setup payment methods
+3. **[Admin Features](./11-admin-features.md)** - Group management tools
 
-1. **📞 [Troubleshooting Guide](./18-troubleshooting.md)** - Common solutions
-2. **❓ [FAQ](./19-faq.md)** - Frequently asked questions
-3. **🐛 [GitHub Issues](https://github.com/yourusername/KoalaStore/issues)** - Report bugs
-4. **💬 [Community Chat](https://chat.whatsapp.com/invite)** - Get help from users
+### For Developers  
+1. **[Architecture Overview](./05-architecture.md)** - Understand the codebase
+2. **[Creating Commands](./13-creating-commands.md)** - Add new features
+3. **[Contributing Guide](./12-contributing.md)** - Join development
 
-## 🎉 Success!
+### For Community Managers
+1. **[Commands Guide](./07-commands.md)** - Complete command reference
+2. **[AFK System](./09-afk-system.md)** - Group-scoped AFK management
+3. **[Group Features](./11-admin-features.md)** - Advanced group tools
 
-Jika semua berjalan lancar, Anda sekarang memiliki:
+## 🆘 Need Help?
 
-- ✅ **Bot WhatsApp** yang berjalan dan terhubung
-- ✅ **Basic store management** untuk produk digital
-- ✅ **Command system** yang siap digunakan
-- ✅ **Development environment** yang ready
+### Documentation
+- **[Complete Documentation](./README.md)** - Full feature guide
+- **[FAQ](./19-faq.md)** - Common questions
+- **[Troubleshooting](./18-troubleshooting.md)** - Problem solving
 
-**Selamat! Bot Anda sudah siap untuk mengelola toko digital! 🎊**
+### Support Channels
+- **[GitHub Issues](https://github.com/pemudakoding/Digital-Store-Assistant/issues)** - Bug reports
+- **[Discussions](https://github.com/pemudakoding/Digital-Store-Assistant/discussions)** - Q&A
+- **Email**: pemudakoding@gmail.com
+
+### Quick Commands untuk Help
+```bash
+# Bot health check
+botstat
+
+# View all available commands  
+help
+
+# Emergency recovery
+resetqueue
+
+# View logs
+npm run pm2:logs
+```
 
 ---
 
-**💡 Pro Tips:**
-- Simpan QR code screenshot untuk backup
-- Backup file `sessionn/` untuk preserve connection
-- Join komunitas untuk tips dan update
-- Baca full documentation untuk advanced features
+**🎉 Congratulations!** KoalaStore Bot sekarang ready untuk handle your digital store operations with enterprise-grade reliability!
 
-**Next: [Installation Guide](./02-installation.md) →** 
+**Next**: [Complete Configuration Guide →](./03-configuration.md) 
