@@ -232,6 +232,12 @@ const products = await databaseManager.getList();
 
 ---
 
+## When creating documentation of history
+- Always put it within .specstory as subfolder
+- use descriptive name kebab-case
+- cross-reference with other relevant docs
+- keep root directory profesioan and clean
+
 **Note**: These standards should be reviewed and updated regularly as the project evolves. All team members should follow these guidelines to maintain code quality and consistency. and documentation after process put it on `.specstory/guides/`
 
 
