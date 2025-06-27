@@ -1,25 +1,31 @@
 import logger from "../utils/logger.js";
 import { getCurrentTime, getCurrentDate, getCurrentDay, getGreeting } from "../utils/common.js";
-import { messageQueue, chatUpsertQueue } from "../utils/queue.js";
+import { messageQueue, chatUpsertQueue, queueHelpers } from "../utils/queue.js";
 
 class MessageHandler {
     constructor(client, services, commandHandler) {
         this.client = client;
         this.services = services;
         this.commandHandler = commandHandler;
+        this.lastProcessedTime = new Map(); // Track last processed time per user to prevent spam
     }
 
     /**
-     * Handle incoming messages using queue
+     * Handle incoming messages using queue with enhanced error handling
      */
     async handleMessage(m) {
-        return chatUpsertQueue.add(async () => {
-            return this.processMessage(m);
-        });
+        return queueHelpers.safeAdd(
+            chatUpsertQueue,
+            async () => this.processMessage(m),
+            async () => {
+                logger.warn('Fallback: Processing message without queue');
+                return this.processMessage(m);
+            }
+        );
     }
 
     /**
-     * Process incoming message
+     * Process incoming message with enhanced error handling and fallback responses
      */
     async processMessage(m) {
         try {
@@ -28,6 +34,18 @@ class MessageHandler {
 
             // Create message context
             const context = await this.createContext(msg);
+            
+            // Prevent spam processing (max 1 message per user per second)
+            const userId = context.sender;
+            const now = Date.now();
+            const lastProcessed = this.lastProcessedTime.get(userId) || 0;
+            
+            if (now - lastProcessed < 1000) {
+                logger.debug(`Rate limiting user ${userId}`);
+                return;
+            }
+            
+            this.lastProcessedTime.set(userId, now);
             
             // Log message
             this.logMessage(context);
@@ -38,16 +56,33 @@ class MessageHandler {
             // Check if body contains a command
             const parsed = this.commandHandler.parseCommandWithoutPrefix(context.body);
             if (parsed) {
-                // Execute command using queue
-                await messageQueue.add(async () => {
-                    return this.commandHandler.execute(parsed.command, {
-                        ...context,
-                        args: parsed.args,
-                        fullArgs: parsed.fullArgs
-                    });
-                });
+                // Execute command using queue with enhanced error handling
+                await queueHelpers.safeAdd(
+                    messageQueue,
+                    async () => {
+                        return this.commandHandler.execute(parsed.command, {
+                            ...context,
+                            args: parsed.args,
+                            fullArgs: parsed.fullArgs,
+                            commandHandler: this.commandHandler
+                        });
+                    },
+                    async () => {
+                        // Fallback: direct execution without queue
+                        logger.warn('Fallback: Executing command without queue');
+                        return this.commandHandler.execute(parsed.command, {
+                            ...context,
+                            args: parsed.args,
+                            fullArgs: parsed.fullArgs,
+                            commandHandler: this.commandHandler
+                        });
+                    }
+                );
                 return; // Exit after command execution
             }
+
+            // Enhanced command detection for partial matches
+            await this.handlePartialCommandMatch(context);
 
             // Check AFK mentions (when someone mentions/replies to AFK users)
             await this.handleAfkMentions(context);
@@ -57,6 +92,19 @@ class MessageHandler {
 
         } catch (error) {
             logger.error("Error handling message", error);
+            
+            // Send error response to user if possible
+            try {
+                if (context?.messageService && context?.from && context?.msg) {
+                    await context.messageService.reply(
+                        context.from, 
+                        "⚠️ Maaf, terjadi kesalahan saat memproses pesan Anda. Silakan coba lagi.", 
+                        context.msg
+                    );
+                }
+            } catch (responseError) {
+                logger.error("Failed to send error response", responseError);
+            }
         }
     }
 
@@ -400,6 +448,49 @@ class MessageHandler {
                 logger.error("Error checking product key", error);
             }
         });
+    }
+
+    /**
+     * Handle partial command matches and provide suggestions
+     */
+    async handlePartialCommandMatch(context) {
+        try {
+            const { body, messageService, from, msg } = context;
+            
+            if (!body || body.length < 2) return;
+            
+            const inputCommand = body.toLowerCase().trim();
+            const allCommands = this.commandHandler.getCommands();
+            
+            // Find similar commands (fuzzy matching)
+            const suggestions = allCommands
+                .filter(cmd => {
+                    const cmdName = cmd.name.toLowerCase();
+                    const aliases = cmd.aliases || [];
+                    
+                    // Check if input is similar to command name or aliases
+                    return cmdName.includes(inputCommand) || 
+                           inputCommand.includes(cmdName) ||
+                           aliases.some(alias => alias.toLowerCase().includes(inputCommand) || 
+                                                inputCommand.includes(alias.toLowerCase()));
+                })
+                .slice(0, 3); // Limit to 3 suggestions
+            
+            // If we found suggestions, send them
+            if (suggestions.length > 0 && inputCommand.length >= 3) {
+                const suggestionText = suggestions
+                    .map(cmd => `• ${cmd.name} - ${cmd.description}`)
+                    .join('\n');
+                
+                const responseMessage = `🤔 Apakah Anda mencari:\n\n${suggestionText}\n\n💡 Ketik *help* untuk melihat semua perintah yang tersedia.`;
+                
+                await messageService.reply(from, responseMessage, msg);
+                logger.info(`Provided command suggestions for: ${inputCommand}`);
+            }
+            
+        } catch (error) {
+            logger.error("Error in partial command matching:", error);
+        }
     }
 }
 
