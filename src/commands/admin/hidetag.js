@@ -1,8 +1,19 @@
 /**
  * Hidetag command - Tag all members without notification
+ * 
+ * Usage: hidetag [message]
+ * Example: 
+ *   hidetag Halo semua!
+ *   Ini adalah pesan baris pertama
+ *   Dan ini baris kedua
+ * 
+ * Features:
+ * - Preserves line breaks in custom messages
+ * - Supports multi-line messages for better readability
+ * - Tags all group members without individual notifications
  */
 async function hidetagCommand(context) {
-    const { messageService, from, msg, fullArgs, groupMembers, isGroup } = context;
+    const { messageService, from, msg, body, groupMembers, isGroup } = context;
     
     try {
         // Check if this is a group
@@ -26,10 +37,21 @@ async function hidetagCommand(context) {
         // Extract member IDs
         const memberIds = groupMembers.map((member) => member.id);
         
-        // Get message text
-        const messageText = fullArgs && fullArgs.trim().length > 0 
-            ? fullArgs 
-            : "📢 *HIDETAG MESSAGE*\n\nHalo semua! 👋";
+        // Extract message text - preserve line breaks by using original body
+        let messageText = "";
+        
+        // More robust pattern to match command variants (hidetag, .hidetag, !hidetag, etc.)
+        const commandPattern = /^[.!]?hidetag\s*/i;
+        if (body && body.trim().length > 0) {
+            // Remove the command part while keeping everything after it including line breaks
+            const textAfterCommand = body.replace(commandPattern, '');
+            messageText = textAfterCommand;
+        }
+        
+        // Use default message if no custom text provided
+        if (!messageText || messageText.trim().length === 0) {
+            messageText = "📢 *HIDETAG MESSAGE*\n\nHalo semua! 👋";
+        }
         
         // Send message with mentions using MessageService
         await messageService.sendMentions(from, messageText, memberIds, { quoted: msg });
