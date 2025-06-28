@@ -148,7 +148,7 @@ npm run pm2:monit
 ### 🛍️ **Store Features**
 - **Product Management** - Kelola catalog dengan images
 - **Order Processing** - Template untuk proses dan completion
-- **Payment Integration** - DANA, OVO, GoPay, Bank
+- **Social Integration** - YouTube, Instagram, Group Links
 - **Customer Reviews** - Testimonial system
 
 ## 🎯 First Steps After Setup

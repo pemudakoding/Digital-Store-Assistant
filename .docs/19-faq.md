@@ -41,11 +41,8 @@ Kumpulan pertanyaan yang sering diajukan tentang KoalaStore WhatsApp Bot.
 ### Q: Bagaimana cara track sales?
 **A:** Saat ini tracking manual melalui log files. Fitur analytics dashboard sedang dalam development.
 
-### Q: Apakah support payment gateway?
-**A:** Saat ini hanya menampilkan info pembayaran. Direct payment integration sedang dalam roadmap.
-
-### Q: Bisa auto-confirm payment?
-**A:** Tidak, konfirmasi payment masih manual untuk security. Auto-confirmation beresiko fraud.
+### Q: Bagaimana cara mengelola pembayaran?
+**A:** Bot tidak menyediakan fitur payment terintegrasi. Untuk informasi pembayaran, silakan hubungi owner bot langsung melalui command `owner` atau `donasi`.
 
 ### Q: Bagaimana backup data store?
 **A:** Data tersimpan di folder `database/` dalam format JSON. Cukup backup folder tersebut secara berkala.
@@ -184,7 +181,7 @@ pm2 restart koalastore-bot
 ### Q: Apa roadmap untuk 6 bulan ke depan?
 **A:**
 - **v2.1.0:** Web dashboard dan analytics
-- **v2.2.0:** Payment gateway integration  
+- **v2.2.0:** Enhanced automation features  
 - **v2.3.0:** Multi-language support
 - **v3.0.0:** AI integration dan advanced features
 

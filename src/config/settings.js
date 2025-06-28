@@ -23,12 +23,7 @@ const config = {
         groupLink1: process.env.GROUP_LINK_1 || "Link grup WhatsApp mu (1)",
         groupLink2: process.env.GROUP_LINK_2 || "Link grup WhatsApp mu (2)"
     },
-    payment: {
-        dana: process.env.DANA_NUMBER || "085xx",
-        ovo: process.env.OVO_NUMBER || "085xx",
-        gopay: process.env.GOPAY_NUMBER || "085xx",
-        sawer: process.env.SAWER_LINK || "Link saweria mu"
-    },
+
     paths: {
         database: "./database",
         media: "./gambar",
@@ -44,10 +39,7 @@ global.botName = config.bot.botName;
 global.ownerName = config.bot.ownerName;
 global.linkyt = config.links.youtube;
 global.linkig = config.links.instagram;
-global.dana = config.payment.dana;
-global.ovo = config.payment.ovo;
-global.gopay = config.payment.gopay;
-global.sawer = config.payment.sawer;
+
 global.linkgc1 = config.links.groupLink1;
 global.linkgc2 = config.links.groupLink2;
 

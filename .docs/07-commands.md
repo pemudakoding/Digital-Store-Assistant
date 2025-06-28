@@ -238,11 +238,11 @@ Commands eksklusif untuk owner bot. Require owner permission.
 | `logout` | Logout dan clear session | `logout` | `logout` |
 | `queuestats` | Message queue statistics | `queuestats` | `queuestats` |
 
-### 💳 Payment Settings
+### 🔧 Bot Management
 
 | Command | Description | Usage | Example |
 |---------|-------------|-------|---------|
-| `gantiqris` | Update payment QR code | Reply image + `gantiqris` | `gantiqris` |
+| `botstat` | Bot status information | `botstat` | `botstat` |
 
 **Owner Commands Workflow:**
 ```
@@ -268,7 +268,7 @@ Commands untuk menampilkan informasi toko dan produk.
 | `list` | Tampilkan daftar produk | Group only | `list` |
 | `produk` | Tampilkan catalog produk | Private only | `produk` |
 | `testi` | Tampilkan customer testimonials | Private only | `testi` |
-| `payment` | Info pembayaran multi-channel | - | `payment` |
+
 
 **Example:**
 ```
@@ -277,11 +277,10 @@ list
    1. Netflix Premium - Rp 25.000
    2. Spotify Premium - Rp 15.000
    
-payment
-→ 💳 INFORMASI PEMBAYARAN
-   💙 DANA: 08123456789
-   💚 OVO: 08123456789
-   🔵 GoPay: 08123456789
+testi
+→ 🌟 TESTIMONI CUSTOMER
+   "Pelayanan cepat, produk berkualitas!" - Customer A
+   "Recommended banget!" - Customer B
 ```
 
 ---

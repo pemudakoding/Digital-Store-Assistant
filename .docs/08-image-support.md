@@ -146,7 +146,7 @@ The list command now shows image indicators and statistics:
 📖 Cara Penggunaan:
 • Kirim nama produk untuk melihat detail
 • Gunakan previewlist <nama> untuk melihat dengan gambar
-• Ketik payment untuk info pembayaran
+• Ketik testi untuk lihat testimoni customer
 
 🖼️ = Produk dengan gambar
 📝 = Produk hanya teks

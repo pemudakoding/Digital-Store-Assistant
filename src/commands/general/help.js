@@ -23,7 +23,6 @@ async function helpCommand(context) {
 ┏           『 𝙇𝙞𝙨𝙩 𝙈𝙚𝙣𝙪 』           ◧
 
 ⭔ allmenu       ⭐
-⭔ payment
 ⭔ testi
 ⭔ produk
 ⭔ kalkulator

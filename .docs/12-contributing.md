@@ -131,7 +131,7 @@ chore(deps): update baileys to latest version
 # Features
 feature/command-search
 feature/admin-dashboard
-feature/payment-integration
+feature/automation-enhancement
 
 # Bug fixes
 bugfix/message-send-error
@@ -181,7 +181,7 @@ npm run format
 
 - [ ] Bot starts without errors
 - [ ] Basic commands work (`help`, `ping`)
-- [ ] Store commands work (`list`, `payment`)
+- [ ] Store commands work (`list`, `testi`, `produk`)
 - [ ] Admin commands work (if applicable)
 - [ ] Owner commands work (if applicable)
 - [ ] Error handling works properly

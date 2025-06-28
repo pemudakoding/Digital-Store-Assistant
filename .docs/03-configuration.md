@@ -100,7 +100,7 @@ GROUP_LINK_2=https://chat.whatsapp.com/invite2
 SUPPORT_GROUP=https://chat.whatsapp.com/support
 
 # ================================================
-# PAYMENT INFORMATION
+# SOCIAL MEDIA LINKS
 # ================================================
 DANA_NUMBER=08123456789
 DANA_NAME=Your Name
@@ -580,8 +580,8 @@ Beberapa settings bisa diubah saat runtime:
 mode public    // Makes bot available to everyone
 mode private   // Restricts bot to owner only
 
-// Update payment info via commands
-gantiqris      // Update payment QR code
+// Update social media info via configuration
+# Update links di settings.js
 
 // Toggle features
 antilink on    // Enable anti-link protection

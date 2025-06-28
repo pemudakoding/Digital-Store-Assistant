@@ -94,10 +94,7 @@ export const commandsConfig = {
             aliases: ['listproduk'],
             privateOnly: true
         },
-        payment: {
-            description: 'Informasi pembayaran',
-            aliases: ['pay', 'bayar']
-        }
+
     },
 
     // Admin commands - group moderation and management
@@ -284,10 +281,7 @@ export const commandsConfig = {
             description: 'Hapus testimoni',
             ownerOnly: true
         },
-        gantiqris: {
-            description: 'Ganti QR payment',
-            ownerOnly: true
-        },
+
         addproduk: {
             description: 'Tambah produk',
             ownerOnly: true

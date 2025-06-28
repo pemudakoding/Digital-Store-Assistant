@@ -127,7 +127,7 @@ const categoryConfig = {
 ┏          『 🛒 𝙎𝙩𝙤𝙧𝙚 𝙈𝙚𝙣𝙪 』          ◧
 
 🛍️ list (shop)
-🛍️ payment (pay, bayar)
+🛍️ testi (testimonials)
 
 ┗━◧
 ```

@@ -78,13 +78,13 @@ src/commands/
 │   ├── block.js              # Block user from bot
 │   ├── unblock.js            # Unblock user
 │   ├── logout.js             # Logout dan clear session
-│   ├── gantiqris.js          # Update payment QR code
+│   ├── botstat.js            # Bot status monitoring
 │   └── queuestats.js         # Message queue statistics
 ├── 📁 store/                  # Commands untuk store management
 │   ├── list.js               # Display product list (group only)
 │   ├── produk.js             # Display products (private only)
 │   ├── testi.js              # Display testimonials (private only)
-│   └── payment.js            # Payment information multi-channel
+│   └── testi.js              # Customer testimonials display
 ├── 📁 calculator/             # Mathematical operations
 │   ├── tambah.js             # Addition operation
 │   ├── kurang.js             # Subtraction operation
@@ -277,7 +277,6 @@ database/
 
 ```
 gambar/
-├── qris.jpg                   # Payment QR code
 ├── thumbnail.jpg              # Bot profile picture
 ├── suara.mp3                  # Audio assets
 ├── *.jpg                      # Dynamic images (user uploads)

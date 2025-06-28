@@ -304,7 +304,7 @@ describe('WhatsApp E2E Tests', () => {
 
 #### Store Commands
 - [ ] `list` - Shows product list (group only)
-- [ ] `payment` - Shows payment info
+- [ ] `testi` - Shows testimonials
 - [ ] `testi` - Shows testimonials (private only)
 
 #### Admin Commands (in group)
@@ -327,8 +327,8 @@ describe('WhatsApp E2E Tests', () => {
 2. Welcome message appears
 3. Customer types `list`
 4. Customer sees product list
-5. Customer types `payment`
-6. Customer sees payment info
+5. Customer types `testi`
+6. Customer sees testimonials
 
 #### Scenario 2: Order Processing
 1. Customer sends order message

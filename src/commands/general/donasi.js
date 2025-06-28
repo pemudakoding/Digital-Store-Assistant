@@ -10,15 +10,11 @@ async function donasiCommand(context) {
     try {
         let tekssss = `───「  *DONASI*  」────
 
-*Payment donasi💰*
+*Terima kasih atas dukungan Anda! 💰*
 
-- *Dana :* ${config.payment.dana}
-- *Gopay :*  ${config.payment.gopay}
-- *Ovo :* ${config.payment.ovo}
-- *Saweria :* ${config.payment.sawer}
-- *Qris :* Scan qr di atas
+Berapapun donasi dari kalian itu sangat berarti bagi kami untuk terus mengembangkan bot ini.
 
-berapapun donasi dari kalian itu sangat berarti bagi kami
+Untuk informasi donasi, silakan hubungi owner bot.
 `;
 
         // Check if QRIS image exists

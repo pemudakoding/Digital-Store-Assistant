@@ -43,7 +43,6 @@ npm run pm2:start
 ### 🛍️ **Advanced Store Management**
 - **🖼️ Image Support** - Upload dan manage gambar produk otomatis
 - **Order Processing** - Template otomatis untuk proses dan completion
-- **Payment Integration** - Support DANA, OVO, GoPay, Bank Transfer
 - **Customer Testimonials** - Sistem review dan rating terintegrasi
 - **Product Catalog** - Kelola ribuan produk dengan search dan categories
 

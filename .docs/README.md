@@ -97,7 +97,7 @@ Jika Anda ingin menggunakan bot untuk toko digital:
 - **Image Support System** - Upload dan manage gambar produk dengan auto-optimization
 - **Order Processing Templates** - Template otomatis untuk proses dan completion
 - **Customer Testimonials** - Sistem review dan rating yang terintegrasi
-- **Multi-Channel Payments** - Support DANA, OVO, GoPay, Bank Transfer
+- **Customer Service Automation** - Template responses dan auto-reply system
 - **Rental/Subscription System** - Kelola layanan berlangganan dengan automatic renewal
 
 ### 🤖 Smart Automation
@@ -162,7 +162,7 @@ Jika Anda ingin menggunakan bot untuk toko digital:
 - Automate customer service 24/7 dengan intelligent responses
 - Manage product catalog dengan gambar real-time dan auto-optimization
 - Process orders dengan template dan automatic status updates
-- Handle payments multiple channels dengan transaction tracking
+- Build customer relationships dengan automated responses dan support system
 - Build customer loyalty dengan testimonials dan review system
 
 ### 👥 Community Managers

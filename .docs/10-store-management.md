@@ -9,7 +9,7 @@ KoalaStore Bot menyediakan sistem manajemen toko yang comprehensive dengan fitur
 - **Group-specific Lists** - List produk per grup
 - **Order Processing** - Template dan tracking order
 - **Customer Testimonials** - Sistem review dan rating
-- **Payment Integration** - Multi-channel payment info
+- **Customer Support** - Auto-response dan template system
 - **Analytics** - Tracking performa toko
 
 ## 🏪 Setup Store
@@ -34,36 +34,27 @@ const setting = {
 };
 ```
 
-### 2. Payment Configuration
+### 2. Social Media Configuration
 
-Setup payment methods di `src/config/settings.js`:
+Setup social media links di `src/config/settings.js`:
 
 ```javascript
 const config = {
-  payment: {
-    dana: "08123456789",
-    ovo: "08123456789", 
-    gopay: "08123456789",
-    sawer: "https://saweria.co/youraccount",
-    
-    // Bank transfer (optional)
-    bank: {
-      name: "BCA",
-      account: "1234567890",
-      holder: "Your Store Name"
-    }
+  links: {
+    youtube: "https://youtube.com/channel/yourchannel",
+    instagram: "https://instagram.com/youraccount", 
+    groupLink1: "https://chat.whatsapp.com/grouplink1",
+    groupLink2: "https://chat.whatsapp.com/grouplink2"
   }
 };
 ```
 
-### 3. Upload Payment QR Code
+### 3. Upload Bot Media
 
 ```bash
-# Ganti QR code pembayaran
-# Upload file ke gambar/qris.jpg
-# Atau gunakan command owner:
-gantiqris
-# (lalu kirim gambar QRIS baru)
+# Ganti thumbnail bot
+# Upload file ke gambar/thumbnail.jpg
+# File akan otomatis digunakan sebagai profile picture bot
 ```
 
 ## 📦 Product Management
@@ -140,7 +131,7 @@ Group akan melihat:
 *╰───────✧*
 
 Untuk melihat detail produk silahkan kirim nama produk.
-💳 *Ketik payment untuk info pembayaran*
+🌟 *Ketik testi untuk lihat testimoni customer*
 ```
 
 ## 📋 Order Processing
