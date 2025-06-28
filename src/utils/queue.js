@@ -54,41 +54,31 @@ const circuitBreaker = {
     }
 };
 
-// Enhanced queue configurations with adaptive timeouts
+// Queue configurations without rate limiting intervals
 const queueConfigs = {
     message: {
-        concurrency: 3,
-        interval: 1000,
-        intervalCap: 8,
-        timeout: 35000,        // Increased to 35s for better reliability
-        throwOnTimeout: false  // Changed to false for graceful handling
+        concurrency: 10,       // Increased for faster processing
+        timeout: 35000,        
+        throwOnTimeout: false  
     },
     chatUpsert: {
-        concurrency: 5,
-        interval: 500,
-        intervalCap: 20,
-        timeout: 30000,        // Increased to 30s for better reliability
-        throwOnTimeout: false  // Changed to false for graceful handling
+        concurrency: 10,       // Increased for faster processing
+        timeout: 30000,        
+        throwOnTimeout: false  
     },
     media: {
-        concurrency: 1,
-        interval: 2000,
-        intervalCap: 3,
-        timeout: 60000,        // Increased from 45s to 60s
+        concurrency: 5,        // Increased for faster processing
+        timeout: 60000,        
         throwOnTimeout: false
     },
     group: {
-        concurrency: 2,
-        interval: 1500,
-        intervalCap: 4,
-        timeout: 20000,        // Increased from 15s to 20s
+        concurrency: 10,       // Increased for faster processing
+        timeout: 20000,        
         throwOnTimeout: false
     },
     broadcast: {
-        concurrency: 1,
-        interval: 3000,
-        intervalCap: 1,
-        timeout: 45000,        // Increased from 30s to 45s
+        concurrency: 5,        // Increased for faster processing
+        timeout: 45000,        
         throwOnTimeout: false
     }
 };

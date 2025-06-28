@@ -5,7 +5,6 @@ import { messageQueue, mediaQueue, queueHelpers } from "../utils/queue.js";
 class MessageService {
     constructor(client) {
         this.client = client;
-        this.lastMessageTime = new Map(); // Track last message time per chat to prevent spam
     }
 
     /**
@@ -19,12 +18,6 @@ class MessageService {
                     // Validate inputs
                     if (!to || !text) {
                         throw new Error('Missing required parameters: to or text');
-                    }
-                    
-                    // Check rate limiting
-                    if (!this.checkRateLimit(to)) {
-                        logger.warn(`Rate limiting messages to ${to}`);
-                        return null;
                     }
                     
                     return await this.client.sendMessage(to, { text }, options);
@@ -58,20 +51,7 @@ class MessageService {
         );
     }
 
-    /**
-     * Check rate limiting for a specific chat
-     */
-    checkRateLimit(chatId, minInterval = 1000) {
-        const now = Date.now();
-        const lastTime = this.lastMessageTime.get(chatId) || 0;
-        
-        if (now - lastTime < minInterval) {
-            return false;
-        }
-        
-        this.lastMessageTime.set(chatId, now);
-        return true;
-    }
+
 
     /**
      * Send text directly (internal use) with timeout protection
@@ -449,13 +429,7 @@ class MessageService {
         }
     }
 
-    /**
-     * Clear rate limiting cache
-     */
-    clearRateLimit() {
-        this.lastMessageTime.clear();
-        logger.info('Rate limit cache cleared');
-    }
+
 }
 
 export default MessageService; 

@@ -29,10 +29,7 @@ async function resetQueueCommand(context) {
         queueSystem.clearAllQueues();
         logger.warn('Queues cleared by admin command');
         
-        // Clear message service rate limiting
-        if (services.messageService.clearRateLimit) {
-            services.messageService.clearRateLimit();
-        }
+
         
         // Force garbage collection if available
         if (global.gc) {
@@ -61,7 +58,6 @@ async function resetQueueCommand(context) {
 
 🔄 *Actions Performed:*
 • ✅ All queues cleared
-• ✅ Rate limits reset
 • ✅ Memory cleanup ${global.gc ? '(with GC)' : '(no GC available)'}
 • ✅ Queues resumed
 

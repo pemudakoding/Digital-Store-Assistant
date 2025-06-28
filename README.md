@@ -50,7 +50,7 @@ npm run pm2:start
 ### 🤖 **Smart Automation**
 - **😴 AFK System** - Group-scoped AFK dengan auto detection
 - **Enhanced Commands** - 50+ commands dengan role-based access
-- **Anti-Spam Protection** - Rate limiting dan queue management
+- **Message Queue System** - Queue management untuk performance optimization
 - **Anti-Link Protection** - Proteksi spam dengan whitelist intelligent
 - **Group Management** - Welcome, kick, promote, broadcast otomatis
 
@@ -76,7 +76,7 @@ npm run pm2:start
 | **Database** | JSON Files | Simple data storage |
 | **Process Manager** | PM2 | Production deployment |
 | **Logging** | Pino | High-performance logging |
-| **Queue** | p-queue | Rate limiting & race condition prevention |
+| **Queue** | p-queue | Race condition prevention & performance optimization |
 
 ## 🎯 Use Cases
 

@@ -273,8 +273,6 @@ class CommandHandler {
             errorMessage = `⏱️ Perintah *${commandName}* memakan waktu terlalu lama. Silakan coba lagi.`;
         } else if (error.message?.includes('timeout')) {
             errorMessage = `⏱️ Koneksi timeout saat menjalankan *${commandName}*. Silakan coba lagi.`;
-        } else if (error.message?.includes('rate limit')) {
-            errorMessage = `🚫 Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.`;
         } else if (error.message?.includes('permission')) {
             errorMessage = `❌ Anda tidak memiliki izin untuk menjalankan perintah ini.`;
         } else {

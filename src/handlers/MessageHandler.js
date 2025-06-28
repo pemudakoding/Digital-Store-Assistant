@@ -7,7 +7,6 @@ class MessageHandler {
         this.client = client;
         this.services = services;
         this.commandHandler = commandHandler;
-        this.lastProcessedTime = new Map(); // Track last processed time per user to prevent spam
     }
 
     /**
@@ -42,18 +41,6 @@ class MessageHandler {
                 logger.debug(`Ignoring self-message from bot: ${context.sender}`);
                 return;
             }
-            
-            // Prevent spam processing (max 1 message per user per second)
-            const userId = context.sender;
-            const now = Date.now();
-            const lastProcessed = this.lastProcessedTime.get(userId) || 0;
-            
-            if (now - lastProcessed < 1000) {
-                logger.debug(`Rate limiting user ${userId}`);
-                return;
-            }
-            
-            this.lastProcessedTime.set(userId, now);
             
             // Log message
             this.logMessage(context);

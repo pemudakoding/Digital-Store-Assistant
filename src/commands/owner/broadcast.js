@@ -28,9 +28,6 @@ async function broadcastCommand(context) {
             try {
                 await messageService.sendText(chatId, `📢 *BROADCAST*\n\n${fullArgs}`);
                 successCount++;
-                
-                // Add delay to prevent spam
-                await new Promise(resolve => setTimeout(resolve, 1000));
             } catch (error) {
                 failCount++;
             }

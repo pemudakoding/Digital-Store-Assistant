@@ -213,6 +213,12 @@ class WhatsAppBot {
                     // Connection replaced by another session
                     logger.warn("🔄 Connection replaced by another session");
                     logger.info("💡 Another WhatsApp session is active. Close other sessions first.");
+
+                    setTimeout(() => {
+                        if (!this.isConnecting) {
+                            this.attemptReconnect();
+                        }
+                    }, 2000);
                     return;
                 } else if (statusCode === 515) {
                     // Need to restart/refresh session
