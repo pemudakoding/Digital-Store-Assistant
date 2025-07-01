@@ -35,10 +35,10 @@ class MessageHandler {
             // Create message context
             const context = await this.createContext(msg);
             
-            // Prevent bot from processing its own messages
-            const botId = this.client.user?.id?.split(":")[0] + "@s.whatsapp.net";
-            if (context.sender === botId) {
+            // Process messages from bot if they are sent by us
+            if (msg.key.fromMe) {
                 logger.debug(`Ignoring self-message from bot: ${context.sender}`);
+
                 return;
             }
             
