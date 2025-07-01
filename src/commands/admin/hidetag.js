@@ -14,7 +14,7 @@
  * - Only forwards the message content without the command word
  */
 async function hidetagCommand(context) {
-    const { messageService, from, msg, body, groupMembers, isGroup } = context;
+    const { messageService, from, msg, body, groupMembers, isGroup, args } = context;
     
     try {
         // Check if this is a group
@@ -39,19 +39,7 @@ async function hidetagCommand(context) {
         const memberIds = groupMembers.map((member) => member.id);
         
         // Extract message text - properly remove only the hidetag command
-        let messageText = "";
-        
-        // More precise pattern to match only the "hidetag" command at the beginning
-        const commandPattern = /^hidetag\s+/i;
-        if (body && body.trim().length > 0) {
-            // Remove only the "hidetag" command part while keeping everything after it
-            if (commandPattern.test(body)) {
-                messageText = body.replace(commandPattern, '').trim();
-            } else {
-                // If no hidetag prefix (shouldn't happen), use original body
-                messageText = body;
-            }
-        }
+        let messageText = args.join(" ");
         
         // Use default message if no custom text provided or if text is empty after removing command
         if (!messageText || messageText.trim().length === 0) {
