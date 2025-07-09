@@ -7,8 +7,7 @@ import fs from 'fs';
 import crypto from 'crypto';
 import ff from 'fluent-ffmpeg';
 import webp from 'node-webpmux';
-import axios from 'axios';
-import BodyForm from 'form-data';
+import { ImageUploadService } from 'node-upload-images';
 
 class MediaService {
     
@@ -195,31 +194,23 @@ class MediaService {
     }
 
     /**
-     * Upload file to Uguu.se
+     * Upload file to permanent hosting service
      * @param {string} filePath - Path to file
-     * @returns {Promise<Object>} Upload response
+     * @returns {Promise<Object>} Upload response with URL
      */
-    async uploadToUguu(filePath) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const form = new BodyForm();
-                form.append('files[]', fs.createReadStream(filePath));
-                
-                const response = await axios({
-                    url: 'https://uguu.se/upload.php',
-                    method: 'POST',
-                    headers: {
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
-                        ...form.getHeaders()
-                    },
-                    data: form
-                });
-                
-                resolve(response.data.files[0]);
-            } catch (err) {
-                reject(err);
-            }
-        });
+    async uploadFile(filePath) {
+        try {
+            const buffer = fs.readFileSync(filePath);
+            const service = new ImageUploadService("pixhost.to");
+            const { directLink } = await service.uploadFromBinary(
+                buffer,
+                `koalastore_${Date.now()}.jpg`
+            );
+            return { url: directLink.toString() };
+        } catch (err) {
+            console.error('Upload error:', err);
+            throw new Error(`Upload failed: ${err.message}`);
+        }
     }
 
     /**

@@ -36,7 +36,7 @@ export default {
     writeExifImg: lib.mediaService.writeExifImg.bind(lib.mediaService),
     writeExifVid: lib.mediaService.writeExifVid.bind(lib.mediaService),
     writeExif: lib.mediaService.writeExif.bind(lib.mediaService),
-    UploadFileUgu: lib.mediaService.uploadToUguu.bind(lib.mediaService),
+    UploadFileUgu: lib.mediaService.uploadFile.bind(lib.mediaService), // Updated to new method name
 
     // From old scraper2.js
     Tiktok: lib.scraperService.downloadTikTok.bind(lib.scraperService),
