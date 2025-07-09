@@ -139,45 +139,6 @@ export default async function updateListCommand(context) {
  * @returns {Promise<string>} Image URL
  */
 async function uploadImageToService(mediaData) {
-    const fs = await import('fs');
-    const crypto = await import('crypto');
-    const BodyForm = (await import('form-data')).default;
-    const axios = (await import('axios')).default;
-    
-    return new Promise(async (resolve, reject) => {
-        try {
-            // Save image to temporary file
-            const tempFileName = `./gambar/temp_${crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.jpg`;
-            fs.writeFileSync(tempFileName, mediaData);
-            
-            // Upload to Uguu.se
-            const form = new BodyForm();
-            form.append('files[]', fs.createReadStream(tempFileName));
-            
-            const response = await axios({
-                url: 'https://uguu.se/upload.php',
-                method: 'POST',
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
-                    ...form.getHeaders()
-                },
-                data: form
-            });
-            
-            // Clean up temp file
-            if (fs.existsSync(tempFileName)) {
-                fs.unlinkSync(tempFileName);
-            }
-            
-            if (response.data.files && response.data.files[0] && response.data.files[0].url) {
-                resolve(response.data.files[0].url);
-            } else {
-                reject(new Error('Upload failed - no URL returned'));
-            }
-            
-        } catch (err) {
-            console.error('Upload error:', err);
-            reject(err);
-        }
-    });
+    const { uploadImage } = await import('../../utils/imageUploader.js');
+    return await uploadImage(mediaData);
 } 
