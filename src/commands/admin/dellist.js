@@ -10,7 +10,7 @@ async function dellistCommand(context) {
                 `Gunakan dengan cara dellist *key*\n\n_Contoh_\n\ndellist diamondml`, msg);
         }
         
-        const key = args[0];
+        const key = args.join(' ');
         const listData = listManager.getListDb();
         
         if (!listManager.isAlreadyResponList(from, key, listData)) {

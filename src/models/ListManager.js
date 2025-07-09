@@ -60,7 +60,7 @@ class ListManager {
     getDataResponList(groupID, key, db) {
         let position = null;
         Object.keys(db).forEach((x) => {
-            if (db[x].id === groupID && db[x].key === key) {
+            if (db[x].id === groupID && db[x].key.trim().toLowerCase() === key.trim().toLowerCase()) {
                 position = x;
             }
         });
@@ -75,7 +75,7 @@ class ListManager {
      * @returns {boolean} Does exist
      */
     isAlreadyResponList(groupID, key, db) {
-        return db.some(item => item.id === groupID && item.key === key);
+        return db.some(item => item.id === groupID && item.key.trim().toLowerCase() === key.trim().toLowerCase());
     }
 
     /**
@@ -86,7 +86,7 @@ class ListManager {
      * @returns {string|null} Response text
      */
     sendResponList(groupId, key, db) {
-        const item = db.find(item => item.id === groupId && item.key === key);
+        const item = db.find(item => item.id === groupId && item.key.trim().toLowerCase() === key.trim().toLowerCase());
         return item ? item.response : null;
     }
 
@@ -107,7 +107,7 @@ class ListManager {
      * @param {Array} db - Database array
      */
     delResponList(groupID, key, db) {
-        const index = db.findIndex(item => item.id === groupID && item.key === key);
+        const index = db.findIndex(item => item.id === groupID && item.key.trim().toLowerCase() === key.trim().toLowerCase());
         if (index !== -1) {
             db.splice(index, 1);
             fs.writeFileSync(this.listPath, JSON.stringify(db, null, 3));
@@ -124,7 +124,7 @@ class ListManager {
      * @param {Array} db - Database array
      */
     updateResponList(groupID, key, response, isImage, imageUrl, db) {
-        const index = db.findIndex(item => item.id === groupID && item.key === key);
+        const index = db.findIndex(item => item.id === groupID && item.key.trim().toLowerCase() === key.trim().toLowerCase());
         if (index !== -1) {
             db[index].response = response;
             db[index].isImage = isImage;
@@ -141,7 +141,7 @@ class ListManager {
      * @param {Array} db - Database array
      */
     updateResponListKey(groupID, key, newKey, db) {
-        const index = db.findIndex(item => item.id === groupID && item.key === key);
+        const index = db.findIndex(item => item.id === groupID && item.key.trim().toLowerCase() === key.trim().toLowerCase());
         if (index !== -1) {
             db[index].key = newKey;
             fs.writeFileSync(this.listPath, JSON.stringify(db, null, 3));
@@ -156,7 +156,7 @@ class ListManager {
      * @param {Array} db - Database array
      */
     updateListStatus(groupID, key, isClose, db) {
-        const index = db.findIndex(item => item.id === groupID && item.key === key);
+        const index = db.findIndex(item => item.id === groupID && item.key.trim().toLowerCase() === key.trim().toLowerCase());
         if (index !== -1) {
             db[index].isClose = isClose;
             fs.writeFileSync(this.listPath, JSON.stringify(db, null, 3));

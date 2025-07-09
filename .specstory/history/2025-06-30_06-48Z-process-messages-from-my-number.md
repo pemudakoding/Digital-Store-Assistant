@@ -25,15 +25,7 @@ Let me modify the code:
 
 ---
 
-```diff
-              // Prevent bot from processing its own messages
-              const botId = this.client.user?.id?.split(":")[0] + "@s.whatsapp.net";
--             if (context.sender === botId) {
-+             const ownerNumber = "6285761211328@s.whatsapp.net"; // Based on the image file name in gambar/
-+             if (context.sender === botId && context.sender !== ownerNumber) {
-                  logger.debug(`Ignoring self-message from bot: ${context.sender}`);
-                  return;
-```
+Cancelled
 
 ---
 
@@ -56,6 +48,132 @@ Would you like me to make any adjustments to this implementation? For example, w
 3. Make any other modifications to the message processing logic
 
 Please let me know if you want any changes or if this meets your requirements!
+
+---
+
+_**User**_
+
+i mean from.me attribute on baileys which is indicate send by bot number
+
+---
+
+_**Assistant**_
+
+Ah, I apologize for the misunderstanding! Now I understand - you want to process messages that have the `fromMe` attribute from Baileys, which indicates messages sent by the bot's number. Let me search for the relevant code first.
+
+---
+
+<details>
+            <summary>Searched codebase "fromMe attribute or property in message handling" • **24** results</summary>
+        
+| File | Lines |
+|------|-------|
+| `src/utils/messageSerializer.js` | L57-79 |
+| `src/utils/messageSerializer.js` | L1-57 |
+| `src/handlers/MessageHandler.js` | L254-296 |
+| `src/utils/baileys.js` | L58-74 |
+| `src/handlers/MessageHandler.js` | L25-52 |
+| `src/utils/baileys.js` | L1-58 |
+| `src/handlers/MessageHandler.js` | L347-363 |
+| `src/handlers/MessageHandler.js` | L296-347 |
+| `src/handlers/MessageHandler.js` | L377-390 |
+| `src/handlers/MessageHandler.js` | L86-102 |
+| `src/WhatsAppBot.js` | L134-157 |
+| `src/handlers/MessageHandler.js` | L390-412 |
+| `src/handlers/MessageHandler.js` | L134-175 |
+| `src/utils/messageSerializer.js` | L137-146 |
+| `src/utils/messageSerializer.js` | L116-126 |
+| `src/utils/messageSerializer.js` | L146-155 |
+| `src/utils/baileys.js` | L74-99 |
+| `src/handlers/MessageHandler.js` | L102-134 |
+| `src/handlers/MessageHandler.js` | L363-377 |
+| `src/handlers/MessageHandler.js` | L52-86 |
+| `src/WhatsAppBot.js` | L55-87 |
+| `src/utils/messageSerializer.js` | L79-116 |
+| `src/utils/messageSerializer.js` | L126-137 |
+| `.cursor/rules/02-whatsapp-bot-domain-knowledge.mdc` | L1-56 |
+
+</details>
+
+---
+
+I see that the message handling is done in `MessageHandler.js`. Currently, it's blocking messages from the bot's own number. Let me modify this to process messages when they have the `fromMe` attribute set to true.
+
+---
+
+```diff
+              const context = await this.createContext(msg);
+              
+-             // Prevent bot from processing its own messages
+-             const botId = this.client.user?.id?.split(":")[0] + "@s.whatsapp.net";
+-             if (context.sender === botId) {
++             // Process messages from bot if they are sent by us
++             if (msg.key.fromMe) {
++                 logger.debug(`Processing self-message from bot: ${context.sender}`);
++             }
++             // Otherwise prevent bot from processing its own messages
++             else if (context.sender === botId) {
+                  logger.debug(`Ignoring self-message from bot: ${context.sender}`);
+                  return;
+```
+
+---
+
+I've modified the code to:
+
+1. Check if the message has `msg.key.fromMe = true`, which indicates it was sent by the bot's number
+2. If it is from the bot's number, process the message and log it
+3. If it's not from the bot's number but matches the bot's ID, ignore it (this prevents processing messages from other instances of the bot)
+
+This change means that:
+- Messages you send using the bot's number will be processed
+- Messages from other instances of the bot will still be ignored
+- Messages from other users will continue to work normally
+
+The change uses the Baileys `fromMe` attribute which is the proper way to detect messages sent by the bot's number, as you mentioned.
+
+Would you like me to make any adjustments to this implementation?
+
+---
+
+_**User**_
+
+please do small commits
+
+---
+
+_**Assistant**_
+
+I apologize for making too many changes at once. You're right - let's make smaller, focused commits. Let me break this down into smaller steps.
+
+Step 1 - Let's first just add the `fromMe` check:
+
+---
+
+```diff
+              const context = await this.createContext(msg);
+              
+-             // Process messages from bot if they are sent by us
+-             if (msg.key.fromMe) {
++             // Prevent bot from processing its own messages
++             const botId = this.client.user?.id?.split(":")[0] + "@s.whatsapp.net";
++             if (context.sender === botId && !msg.key.fromMe) {
+                  logger.debug(`Ignoring self-message from bot: ${context.sender}`);
+- 
+                  return;
+              }
+```
+
+---
+
+This small change:
+1. Keeps the existing bot ID check
+2. Only ignores messages if they are from the bot ID AND not sent by us (`!msg.key.fromMe`)
+3. Maintains the same logging message
+
+This way we're making a minimal change that allows messages from the bot when they have `fromMe=true` while still preventing processing of messages from other bot instances.
+
+Would you like me to proceed with any other small changes, or is this change sufficient for your needs?
 
 ---
 
